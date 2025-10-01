@@ -1125,7 +1125,9 @@ Jeppe Fjeldgaard Qvist
 <li>Programmer og programmering</li>
 <li>Python og programmeringsparadigmer</li>
 </ol>
-<div id="4ee6849c" class="cell" data-execution_count="1">
+<div style="display: flex; justify-content: center; align-items: center;">
+<div style="font-size: 0.6em;">
+<div id="07500387" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb1-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn: <span class="bu">str</span>, alder: <span class="bu">int</span>, køn: <span class="bu">str</span>):</span>
 <span id="cb1-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -1148,6 +1150,8 @@ Jeppe Fjeldgaard Qvist
 <span id="cb1-20"><a href></a>        <span class="cf">if</span> value <span class="op">&lt;</span> <span class="dv">0</span>:</span>
 <span id="cb1-21"><a href></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;Alder kan ikke være negativ&quot;</span>)</span>
 <span id="cb1-22"><a href></a>        <span class="va">self</span>._alder <span class="op">=</span> value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -1234,13 +1238,13 @@ Jeppe Fjeldgaard Qvist
 <section class="slide level2">
 
 <h4 id="søgealgoritmer">Søgealgoritmer</h4>
-<div id="b5e8f3c2" class="cell" data-execution_count="2">
+<div id="79fa99f1" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href></a><span class="co"># Find alle personer der ikke er elever</span></span>
 <span id="cb4-2"><a href></a>ikke_elever <span class="op">=</span> [p <span class="cf">for</span> p <span class="kw">in</span> personer <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(p, Elev)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <h4 id="sorteringsalgoritmer">Sorteringsalgoritmer</h4>
-<div id="b61aedc0" class="cell" data-execution_count="3">
+<div id="78e7d178" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href></a><span class="co"># Sortér personer efter alder</span></span>
 <span id="cb5-2"><a href></a>sorterede <span class="op">=</span> <span class="bu">sorted</span>(personer, key<span class="op">=</span><span class="kw">lambda</span> p: p.alder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1248,7 +1252,7 @@ Jeppe Fjeldgaard Qvist
 <section class="slide level2">
 
 <h4 id="valideringsalgoritmer">Valideringsalgoritmer</h4>
-<div id="95a963ed" class="cell" data-execution_count="4">
+<div id="a21fc04a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href></a><span class="at">@alder.setter</span></span>
 <span id="cb6-2"><a href></a><span class="kw">def</span> alder(<span class="va">self</span>, value):</span>
 <span id="cb6-3"><a href></a>    <span class="cf">try</span>:</span>
@@ -1491,7 +1495,7 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 </ul>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="d83e4083" class="cell" data-execution_count="5">
+<div id="30c91805" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href></a>a <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb19-2"><a href></a>b <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb19-3"><a href></a><span class="bu">sum</span> <span class="op">=</span> a <span class="op">+</span> b</span>
@@ -1729,7 +1733,7 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 <blockquote>
 <p>Tænk på en klasse som en kageopskrift og objekter som de færdige kager.</p>
 </blockquote>
-<div id="03bcacb5" class="cell" data-execution_count="6">
+<div id="ba61506e" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb23-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn, alder, køn):</span>
 <span id="cb23-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -1747,7 +1751,7 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 <li>Organiserer data og funktionalitet sammen</li>
 <li>Modellerer virkeligheden</li>
 </ol>
-<div id="d7bbf836" class="cell" data-execution_count="7">
+<div id="079afa9b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href></a><span class="co"># Dette er en klasse (opskriften)</span></span>
 <span id="cb24-2"><a href></a><span class="kw">class</span> Kage:</span>
 <span id="cb24-3"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, smag, størrelse):</span>
@@ -1776,7 +1780,7 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 
 <div style="display: flex; justify-content: center; align-items: center;">
 <div style="font-size: 0.6em;">
-<div id="03d90d41" class="cell" data-execution_count="8">
+<div id="513d200d" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href></a><span class="kw">class</span> Bil:</span>
 <span id="cb25-2"><a href></a>    <span class="co"># Konstruktøren (__init__) kører når vi laver et nyt objekt</span></span>
 <span id="cb25-3"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, mærke, farve, benzin_tank<span class="op">=</span><span class="dv">50</span>):</span>
@@ -1846,7 +1850,7 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 
 <div style="display: flex; justify-content: center; align-items: center;">
 <div style="font-size: 0.6em;">
-<div id="76f449a2" class="cell" data-execution_count="9">
+<div id="0a4c9cbc" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href></a><span class="kw">class</span> Dyr:  <span class="co"># Superklasse/Basis klasse</span></span>
 <span id="cb26-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn, vægt):</span>
 <span id="cb26-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -1934,13 +1938,13 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 <h2>DRY (Don’t Repeat Yourself)</h2>
 <div style="display: flex; justify-content: center; align-items: center;">
 <div style="font-size: 1.0em;">
-<div id="5b56fc18" class="cell" data-execution_count="10">
+<div id="23d132ce" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href></a><span class="kw">class</span> Elev(Person):</span>
 <span id="cb27-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn, alder, køn, skole, klassetrin):</span>
 <span id="cb27-3"><a href></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(navn, alder, køn)  <span class="co"># Genbruger Person&#39;s kode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div id="5d9ac745" class="cell" data-execution_count="11">
+<div id="f1b0bcfe" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href></a><span class="co"># DÅRLIGT: Gentagen kode</span></span>
 <span id="cb28-2"><a href></a><span class="kw">def</span> beregn_løn_direktør(timer, timeløn):</span>
 <span id="cb28-3"><a href></a>    grundløn <span class="op">=</span> timer <span class="op">*</span> timeløn</span>
@@ -1966,7 +1970,7 @@ ROGRAM = KODE + DATA + INSTRUKTIONER
 <p>Hver funktion har ét ansvar!</p>
 <div style="display: flex; justify-content: center; align-items: center;">
 <div style="font-size: 1.0em;">
-<div id="ac9f3b3f" class="cell" data-execution_count="12">
+<div id="90eb2ede" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href></a>gem_personer_csv() <span class="co"># Gemmer kun data!</span></span>
 <span id="cb29-2"><a href></a>indlaes_personer_csv() <span class="co"># Indlæser kun data!</span></span>
 <span id="cb29-3"><a href></a>main() <span class="op">-</span> <span class="co"># Håndterer kun bruger fladen!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2005,7 +2009,7 @@ SOLID er fem designprincipper der hjælper med at skabe vedligeholdelsesvenlig o
 ::: {style="display: flex; justify-content: center; align-items: center;"}
 ::: {style="font-size: 0.6em;"}
 
-::: {#1b458195 .cell execution_count=13}
+::: {#c104091a .cell execution_count=13}
 ``` {.python .cell-code}
 # DÅRLIGT: Klassen har flere ansvarsområder
 class Bruger:
@@ -2032,7 +2036,7 @@ class Bruger:
 ::: {style="display: flex; justify-content: center; align-items: center;"}
 ::: {style="font-size: 0.6em;"}
 
-::: {#ff1e7203 .cell execution_count=14}
+::: {#5fc32748 .cell execution_count=14}
 ``` {.python .cell-code}
 # GODT: Opdelt i separate klasser med enkelt ansvar
 class Bruger:
@@ -2079,7 +2083,7 @@ class EmailService:
 </section>
 <section class="slide level2">
 
-<div id="c5b949c2" class="cell" data-execution_count="15">
+<div id="38c6ce4e" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb30-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn: <span class="bu">str</span>, alder: <span class="bu">int</span>, køn: <span class="bu">str</span>):</span>
 <span id="cb30-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -2113,7 +2117,7 @@ class EmailService:
 <li>Uden self ved funktionen ikke, hvilket objekt den skal arbejde me</li>
 </ul>
 <p>Når vi kalder <code>p.alder()</code>, oversætter Python internt det til:</p>
-<div id="2801362e" class="cell" data-execution_count="16">
+<div id="e95c6778" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href></a>Person.alder(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
@@ -2125,7 +2129,7 @@ class EmailService:
 <section class="slide level2">
 
 <p>Uden <code>self</code> ville Python ikke vide, hvor attributterne skulle gemmes. De ville være lokale variabler i <strong>init</strong>.</p>
-<div id="8d9eb04b" class="cell" data-execution_count="17">
+<div id="beb7b1e7" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href></a>p <span class="op">=</span> Person(<span class="st">&quot;Anna&quot;</span>, <span class="dv">25</span>, <span class="st">&quot;F&quot;</span>)</span>
 <span id="cb32-2"><a href></a>Person.<span class="fu">__init__</span>(p, <span class="st">&quot;Anna&quot;</span>, <span class="dv">25</span>, <span class="st">&quot;F&quot;</span>)</span>
 <span id="cb32-3"><a href></a><span class="co"># p bliver &quot;self&quot; inde i __init__</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2138,7 +2142,7 @@ class EmailService:
 <li>En decorator er en slags “pakke” eller “tilføjelse”, som du kan lægge ovenpå en funktion eller en klasse, uden at ændre selve koden inde i funktionen/klassen.</li>
 <li><code>@property</code> lader os bruge en metode som om den var en attribut og bruges ofte i <strong>klasser</strong>.</li>
 </ul>
-<div id="235a19a8" class="cell" data-execution_count="18">
+<div id="9fc46a80" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href></a><span class="kw">class</span> Cirkel:</span>
 <span id="cb33-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, radius):</span>
 <span id="cb33-3"><a href></a>        <span class="va">self</span>._radius <span class="op">=</span> radius</span>
@@ -2156,7 +2160,7 @@ class EmailService:
 </section>
 <section class="slide level2">
 
-<div id="16ebd930" class="cell" data-execution_count="19">
+<div id="a93c0b10" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb35-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn, fødselsår):</span>
 <span id="cb35-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -2179,7 +2183,7 @@ class EmailService:
 
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="353c77d5" class="cell" data-execution_count="20">
+<div id="04fb7bf9" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb37-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, age):</span>
 <span id="cb37-3"><a href></a>        <span class="va">self</span>._name <span class="op">=</span> name</span>
@@ -2204,7 +2208,7 @@ class EmailService:
 <span id="cb37-22"><a href></a><span class="bu">print</span>(person.get_age())   <span class="co"># 31</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="d0c4be10" class="cell" data-execution_count="21">
+<div id="5288ef55" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href></a><span class="kw">class</span> PersonPythonic:</span>
 <span id="cb38-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, age):</span>
 <span id="cb38-3"><a href></a>        <span class="va">self</span>._name <span class="op">=</span> name</span>
@@ -2242,7 +2246,7 @@ class EmailService:
 </section>
 <section class="slide level2">
 
-<div id="5e0de968" class="cell" data-execution_count="22">
+<div id="95da391f" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb39-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn, alder, køn):</span>
 <span id="cb39-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -2361,7 +2365,7 @@ self._alder = 25</code></pre>
 <p>Hvis vi ikke brugte <code>@property</code> og <code>@alder.setter</code>, kunne vi lave det samme “manuelt” således:</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="136a439b" class="cell" data-execution_count="23">
+<div id="ba459248" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href></a><span class="kw">class</span> Person:</span>
 <span id="cb43-2"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, navn, alder, køn):</span>
 <span id="cb43-3"><a href></a>        <span class="va">self</span>.navn <span class="op">=</span> navn</span>
@@ -2431,8 +2435,7 @@ self._alder = 25</code></pre>
       ▼                       ▼
 Gem i instans:           Raise ValueError: &quot;Alder kan ikke være negativ&quot;
 self._alder = value
-                            │
-                            ▼
+
 ------------------------------------------------------
 # Læse flow (getter):
 
@@ -2457,7 +2460,7 @@ Resultat sendes tilbage til print / kald</code></pre>
 <blockquote>
 <p>“Start simpelt, refaktorer når nødvendigt</p>
 </blockquote>
-<div id="4f1d95aa" class="cell" data-execution_count="25">
+<div id="b6ae9e8a" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href></a><span class="co"># Start med:</span></span>
 <span id="cb45-2"><a href></a><span class="kw">class</span> User:</span>
 <span id="cb45-3"><a href></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name):</span>

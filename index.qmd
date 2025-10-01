@@ -53,6 +53,8 @@ format:
 3. Programmer og programmering
 4. Python og programmeringsparadigmer 
 
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.6em;"}
 ```{python}
 #| eval: false
 #| echo: true
@@ -80,6 +82,8 @@ class Person:
             raise ValueError("Alder kan ikke være negativ")
         self._alder = value
 ```
+:::
+:::
 
 ---
 
@@ -1415,8 +1419,7 @@ class Person:
       ▼                       ▼
 Gem i instans:           Raise ValueError: "Alder kan ikke være negativ"
 self._alder = value
-                            │
-                            ▼
+
 ------------------------------------------------------
 # Læse flow (getter):
 
