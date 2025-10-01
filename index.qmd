@@ -1,5 +1,5 @@
 ---
-title: "Titel"
+title: "Softwaredesign"
 subtitle: ""
 author: "Jeppe Fjeldgaard Qvist"
 date: today
@@ -42,15 +42,15 @@ format:
 ## Dagens program
 
 1. Opsamling og opsummering af "Software" (Kap. 4-7 i grundbogen)
-2. Øvelse m. eksamensspg. 
+2. Øvelse med eksempler på eksamensspg. 
 3. **Softwaredesign**
 4. Gruppearbejde (mini-projekter)
 
 ## Opsamling og opsummering af "Software"
 
 1. Algoritmer
-2. Programmer og programmering
-3. (OS'er: lagring af data, filhåndtering)
+2. (OS'er: lagring af data, filhåndtering)
+3. Programmer og programmering
 4. Python og programmeringsparadigmer 
 
 ```{python}
@@ -81,13 +81,74 @@ class Person:
         self._alder = value
 ```
 
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.5em;"}
+```
+        ╔═══════════════════════════════════════╗
+        ║       BRUGER (DIG)                    ║
+        ╚═══════════════════════════════════════╝
+                        ↕
+    ┌─────────────────────────────────────────────┐***
+    │  LAG 5: APPLIKATIONER                       │
+    │  Chrome, Word, Spotify, Python scripts      │
+    └─────────────────────────────────────────────┘
+                        ↕
+    ┌─────────────────────────────────────────────┐****
+    │  LAG 4: PROGRAMMERINGSFRAMEWORKS            │
+    │  Python, Java, .NET, Node.js                │
+    └─────────────────────────────────────────────┘
+                        ↕
+    ┌─────────────────────────────────────────────┐
+    │  LAG 3: SYSTEM BIBLIOTEKER & API'er         │
+    │  Windows API, POSIX, DirectX                │
+    └─────────────────────────────────────────────┘
+                        ↕
+    ┌─────────────────────────────────────────────┐*
+    │  LAG 2: OPERATIVSYSTEM (OS)                 │
+    │  Windows, macOS, Linux                      │
+    └─────────────────────────────────────────────┘
+                        ↕
+    ┌─────────────────────────────────────────────┐
+    │  LAG 1: DEVICE DRIVERS                      │
+    │  Grafikkort driver, USB driver, etc.        │
+    └─────────────────────────────────────────────┘
+                        ↕
+    ┌─────────────────────────────────────────────┐
+    │  LAG 0: FIRMWARE & BIOS/UEFI                │
+    │  Boot system, hardware initialisering       │
+    └─────────────────────────────────────────────┘
+                        ↕
+        ╔═══════════════════════════════════════╗**
+        ║       HARDWARE                        ║
+        ║  CPU, RAM, Harddisk, GPU, etc.        ║
+        ╚═══════════════════════════════════════╝
+```
+:::
+:::
+
+## Drivers (lag 1)
+
+Eksempler:
+
+::: {style="font-size: 0.7em;"}
+* Grafikkort driver (NVIDIA, AMD, Intel)
+* Printer driver (HP, Canon, Epson)
+* WiFi driver
+* USB driver
+* Lyd driver
+* Mus/tastatur driver
+* Hvorfor vigtigt?
+:::
+
+Producenten (e.g., Windows, MacOS) laver driver til deres hardware, så vi fx kan bruge vores printer til både vores MacBook såvel som ChromeBook. 
 
 ## Algoritmer 
 
-<!---
-En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen - hver trin skal være klart defineret og i den rigtige rækkefølge.
+En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen eller en (skatte)formular: Hvert trin skal være klart defineret og i den rigtige rækkefølge.
 
-```
+```{bash}
 1. Fyld vand i kedel
 2. Kog vandet
 3. Læg tepose i kop
@@ -96,15 +157,43 @@ En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et p
 6. Fjern tepose
 ```
 
-Kendetegn ved en god algoritme
+## En god (brugbar) algoritme er eksplicit iht:
 
-Input: Hvad får algoritmen at arbejde med?
-Output: Hvad producerer algoritmen?
-Entydighed: Hvert trin skal være præcist og utvetydigt
-Endelighed: Algoritmen skal stoppe efter et endeligt antal trin
-Effektivitet: Algoritmen skal løse problemet på en fornuftig måde
+* **Input**: Hvad får algoritmen at arbejde med?
+* **Output**: Hvad producerer algoritmen?
+* **Entydighed**: Hvert trin skal være præcist og utvetydigt
+* **Endelighed**: Algoritmen skal stoppe efter et endeligt antal trin
+* (**Effektivitet**: Algoritmen skal løse problemet på en effektiv måde)
 
+---
+
+#### Søgealgoritmer
+
+```{python}
+#| eval: false
+#| echo: true
+# Find alle personer der ikke er elever
+ikke_elever = [p for p in personer if not isinstance(p, Elev)]
 ```
+
+<br>
+
+#### Sorteringsalgoritmer
+
+```{python}
+#| eval: false
+#| echo: true
+# Sortér personer efter alder
+sorterede = sorted(personer, key=lambda p: p.alder)
+```
+
+---
+
+#### Valideringsalgoritmer
+
+```{python}
+#| eval: false
+#| echo: true
 @alder.setter
 def alder(self, value):
     try:
@@ -116,6 +205,10 @@ def alder(self, value):
     self._alder = value
 ```
 
+<br>
+
+::: {style="display: flex; justify-content: left; align-items: left;"}
+::: {style="font-size: 1em;"}
 ```
 INPUT: value (ukendt datatype)
 
@@ -129,207 +222,440 @@ TRIN:
 
 OUTPUT: Valideret alder eller fejlmeddelelse
 ```
+:::
+:::
 
-1. Søgealgoritmer - Find noget i en samling
-# Find alle personer der ikke er elever
-ikke_elever = [p for p in personer if not isinstance(p, Elev)]
+## OS 
 
-3. Sorteringsalgoritmer - Arranger data i orden
-# Sortér personer efter alder
-sorterede = sorted(personer, key=lambda p: p.alder)
+Operativsystemer (OS) som **Windows**, **Mac** eller **Linux** er computerens "hovedprogram" der styrer alt.
+
+1. Når vi klikker med musen eller skriver på tastaturet, oversætter OS'et disse kommandoer til noget computeren forstår
+2. Sørger for at alle programmer (Python, browser, Word osv.) kan køre samtidig uden at kollidere
+3. Fordeler computerens ressourcer (hukommelse, processor, harddisk) mellem programmer
+
+Det er med/gennem OS'et vi kan åbne en terminal/kommandoprompt og kører Python-fortolkeren når vi skriver `python3 script.py` og 
+giver Python adgang til at læse/skrive filer på computeren. 
 
 
----->
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.5em;"}
+
+```
+1. Process Management (Multitasking)
+
+Chrome     [████░░░░] 30% CPU
+Spotify    [██░░░░░░] 15% CPU
+Word       [█░░░░░░░] 10% CPU
+Python     [████████] 45% CPU
+           └────────┬────────┘
+                    │
+              OS fordeler CPU tid
+```
+:::
+:::
+
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.5em;"}
+
+```
+2. Memory Management
+
+RAM (16 GB Total):
+┌─────────────────────────────────────────────┐
+│ OS Kernel:        2 GB    ████              │
+│ Chrome:           4 GB    ████████          │
+│ Python:           1 GB    ██                │
+│ Spotify:          500 MB  █                 │
+│ Available:        8.5 GB  █████████████████ │
+└─────────────────────────────────────────────┘
+```
+:::
+:::
+
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.5em;"}
+
+```
+3. File System
+
+Fysisk disk (rådata):
+[01001010|11010010|10101101|...]
+
+           ↓ OS'ens filsystem oversætter til
+             den logiske struktur vi ser:
+C:\
+├── Windows\
+├── Program Files\
+├── Users\
+    └── Anna\
+        └── Documents\
+            └── rapport.docx
+```
+:::
+:::
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.5em;"}
+
+```
+4. Security & Permissions
+
+Fil: secrets.txt
+
+OS tjekker:
+✓ Er du den rigtige bruger?
+✓ Har du læserettigheder?
+✓ Har du skriverettigheder?
+
+Hvis nej → "Access Denied" 
+```
+:::
+:::
+
+
+## OS: Filsystemet
+
+Tænk på computeren som et arkivskab. Operativsystemet organiserer filer i en **hierarkisk struktur**
+
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.2em;"}
+```
+Computer (Rod)
+│
+├── Bruger (din profil)
+│   ├── Dokumenter/
+│   │   ├── Kurser/
+│   │   │   ├── Python/
+│   │   │   │   ├── script.py
+│   │   │   │   └── data.csv
+│   │   │   └── Ledelse/
+│   │   └── Privat/
+│   │
+│   ├── Downloads/
+│   ├── Skrivebord/
+│   └── Billeder/
+│
+├── Program Files/  (installerede programmer)
+└── System/         (OS filer - rør dem ikke!)
+```
+:::
+:::
+
+## OS: Navigation
+
+```{bash}
+# Windows:
+C:\Brugere\Anna\Dokumenter\Python\script.py
+```
+
+<br> 
+
+```{bash}
+#Mac/Linux:
+/Users/Anna/Documents/Python/script.py
+```
+
+## OS: Datalagring
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.8em;"}
+```
+┌─────────────────────────────────────────┐
+│  CPU REGISTRE (nanosekunders adgang)    │ ⚡⚡⚡⚡⚡
+│  Meget lille: ~KB                       │
+└─────────────────────────────────────────┘
+           ↕
+┌─────────────────────────────────────────┐
+│  RAM (arbejdshukommelse)                │ ⚡⚡⚡⚡
+│  Middel: 8-32 GB                        │
+│  FLYGTIGT - slettes ved genstart!       │
+└─────────────────────────────────────────┘
+           ↕
+┌─────────────────────────────────────────┐
+│  SSD/HARDDISK (permanent lagring)       │ ⚡⚡⚡
+│  Stort: 256 GB - 2 TB+                  │
+│  PERMANENT - bevares ved genstart       │
+└─────────────────────────────────────────┘
+           ↕
+┌─────────────────────────────────────────┐
+│  CLOUD/EKSTERN DISK (backup/arkiv)      │ ⚡⚡
+│  Meget stort: ubegrænset                │
+└─────────────────────────────────────────┘
+```
+:::
+:::
+
+## OS: Organisering af data
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.2em;"}
+```
+Anbefalet organisering mini-projekter:
+MinProjekt/
+├── data/           # Rå data
+├── scripts/        # Python filer
+├── output/         # Resultater
+└── README.txt      # Beskrivelse
+```
+:::
+:::
+
+* Brug relative stier i koden 
+* Læg ikke store datafiler i Git/GitHub---brug .gitignore
+
 
 ## Programmer og programmering 
 
-<!---
-A program is the complete executable code that solves a problem - it includes algorithms, data structures, user interface, file handling, error handling, etc.
-An algorithm is a step-by-step procedure or set of rules to solve a specific problem or perform a specific task. It's like a recipe
+Et **program** er en komplet, eksekverbar kodet løsning der kombinerer:
 
-Your program is the entire Python file, while the algorithms are the specific problem-solving procedures within it. Each function typically contains one or more algorithms. The program orchestrates these algorithms together with data structures (Person, Elev classes), user interaction, and file I/O to create a complete application.
+1. Algoritmer (problemløsning)
+2. Datastrukturer (organisering af data)
+3. Brugergrænseflade (interaktion med brugeren)
+4. Fejlhåndtering (håndtering af uventede situationer)
+5. I/O operationer (læsning/skrivning af data)
 
-Hvad er et program?
-Et program er en komplet, eksekverbar løsning der kombinerer:
+$$
+ROGRAM = KODE + DATA + INSTRUKTIONER
+$$
 
-Algoritmer (problemløsning)
-Datastrukturer (organisering af data)
-Brugergrænseflade (interaktion med brugeren)
-Fejlhåndtering (håndtering af uventede situationer)
-I/O operationer (læsning/skrivning af data)
+Programmet er fx vores fulde `.py`-fil. 
 
-Hvad skal programmet kunne?
-- Registrere personer
-- Opgradere personer til elever
-- Gemme og indlæse data
+> Hvis en algoritme er en opskrift eller programmet en (robot) kok. 
 
-2. Design af datastrukturer
+---
+
+## Programmer vi kender
+
+* Chrome/Firefox - **webbrowser** (`C++`)
+* Word/Excel - **tekstbehandling** (`C++/C#`)
+* Spotify - **musikafspiller** (`C++/Python/JavaScript`)
+* Python i sig selv - **programmeringssprog** (`C)`
+* Vores eget script - **script.py** (`Python`)
+
+## `Programmering` er udgjort af:
+
+1. Kodesproget
+2. Biblioteket og funktion
+3. Adgang til miljøet programmet kører i
+
+## Kompilerede vs. fortolkede 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{cpp}
+#include <iostream>
+
+int main() {
+    int a = 5;
+    int b = 10;
+    int sum = a + b;
+    std::cout << "Sum: " << sum << std::endl;
+    return 0;
+}
+```
+
+<br>
+```{bash}
+g++ program.cpp -o program.exe    # Kompiler
+./program.exe   
+```
+
+::: {style="font-size: 0.6em;"}
+* Windows: program`.exe`
+* Mac: program`.app`
+:::
+
+:::
+
+::: {.column width="50%"}
+```{python}
+#| eval: false
+#| echo: true
+a = 5
+b = 10
+sum = a + b
+print(f"Sum: {sum}")
+```
+
+<br>
+```{bash}
+python3 script.py    # Køres direkte uden kompilering!
+```
+
+<br>
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.6em;"}
+```
+┌──────────────┐         ┌──────────────┐
+│ Kildekode    │         │  Fortolker   │
+│              │ ──────> │  (Python)    │
+│ script.py    │         │              │
+└──────────────┘         └──────┬───────┘
+                                │
+                                │ læser og
+                                │ udfører
+                                │ linje for linje
+                                ▼
+                         ┌──────────────┐
+                         │   Computer   │
+                         └──────────────┘
+```
+:::
+:::
+
+:::
+
+::::
+
+---
+
+| Aspekt | C/C++ | Python |
+|--------|-------|--------|
+| **Hastighed** | Meget hurtig | 10-100x langsommere |
+| **Udviklingshastighed** | Langsom | Meget hurtig |
+| **Sværhedsgrad** | Svært | "Let" |
+| **Hukommelsesstyring** | Manuel (vi styrer) | Automatisk (garbage collector) |
+| **Typisk anvendelse** | OS, spil, databaser | Scripts, data science, web |
+| **Kodelinjer** | Mange | Få |
+
+## Compiler/fortolker
+
+* Programmering er blevet mere "demokratisk" efter introduktionen af høj-niveau sprog. 
+
+* Niveauerne går fra menneskeligt læsbar (høj-niveau) til maskinforståelig (lav-niveau), hvor hver transformation gør koden mere detaljeret men mindre læsbar.
+
+Eksempel fra grundbogen: 
+
+$$Z = X + Y$$
+
+1. **GET** values from the memory locations called X and Y **ADD** them togheter and **STORE** them in the memory at location Z
+2. "=" is "replace"/"store" ikke "equal to". 
+
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.7em;"}
+
+```
+════════════════════════════════════════════════════════════════════
+                         HØJ-NIVEAU PYTHON
+════════════════════════════════════════════════════════════════════
+
+                    def greet(name):
+                        message = "Hej " + name
+                        return message
+                    
+                    result = greet("Anna")
+                    print(result)
+
+────────────────────────────────────────────────────────────────────
+                              ↓ ↓ ↓
+                          🔄 COMPILER
+                              ↓ ↓ ↓
+────────────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════════════
+                        PYTHON BYTECODE
+════════════════════════════════════════════════════════════════════
+
+    LOAD_CONST       "Hej "          # Hent tekst "Hej "
+    LOAD_FAST        name            # Hent variabel 'name'
+    BINARY_ADD                       # Læg sammen: "Hej " + name
+    STORE_FAST       message         # Gem i 'message'
+    LOAD_FAST        message         # Hent 'message'
+    RETURN_VALUE                     # Returner værdien
+
+────────────────────────────────────────────────────────────────────
+                              ↓ ↓ ↓
+                      ⚙️  FORTOLKER (PVM)
+                              ↓ ↓ ↓
+────────────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════════════
+                    LAV-NIVEAU MASKINKODE
+                    (CPU instruktioner)
+════════════════════════════════════════════════════════════════════
+
+    MOV  RAX, [0x7fff...]          # Flyt "Hej " til register
+    MOV  RBX, [0x7ffe...]          # Flyt "Anna" til register
+    CALL string_concat             # Kald funktion til sammenlægning
+    MOV  [0x7ffd...], RAX          # Gem resultat i hukommelse
+    PUSH RAX                       # Put på stack
+    CALL print_function            # Kald print funktion
+    POP  RAX                       # Fjern fra stack
+    RET                            # Returner
+
+────────────────────────────────────────────────────────────────────
+                              ↓ ↓ ↓
+                         💻 PROCESSOR
+                              ↓ ↓ ↓
+────────────────────────────────────────────────────────────────────
+
+════════════════════════════════════════════════════════════════════
+                        BINÆR MASKINKODE
+                    (0'er og 1'er i hukommelsen)
+════════════════════════════════════════════════════════════════════
+
+    10110000 01001000  01100101  01101010    # "Hej "
+    10001000 00010101  11110000  00000001    # MOV instruktion
+    10110011 01000001  01101110  01101110    # "Anna"
+    11101000 00110010  11110000  11111111    # CALL instruktion
+    01001000 10001001  00000101  11100000    # MOV resultat
+    11110100 00001111  10111000  00000001    # PUSH operation
+    ...
+
+════════════════════════════════════════════════════════════════════
+                            OUTPUT
+════════════════════════════════════════════════════════════════════
+
+                          Hej Anna
+
+════════════════════════════════════════════════════════════════════
+```
+:::
+:::
+
+---
+
+| Niveau | Læsbarhed | Hastighed | Eksempel |
+|--------|-----------|-----------|----------|
+| Python | ⭐⭐⭐⭐⭐ | ⭐⭐☆☆☆ | `x = a + b` |
+| Bytecode | ⭐⭐⭐☆☆ | ⭐⭐⭐☆☆ | `BINARY_ADD` |
+| Assembly | ⭐⭐☆☆☆ | ⭐⭐⭐⭐☆ | `ADD RAX, RBX` |
+| Binær | ⭐☆☆☆☆ | ⭐⭐⭐⭐⭐ | `10110000` |
+
+# *Øvelse:* FIND ALGORITMERNE!
+
+# Python og programmeringsparadigmer
+
+## Objektorienteret Programmering (OOP)
+
+* Klasser og objekter.
+* Attributter og metoder.
+* **Indkapsling**: Hold data og metoder sammen i klasser
+* **Nedarvning**: Klasser der bygger videre på andre klasser
+<br>
+* **Polymorfisme** (springes over i dag): Objekter der kan opføre sig forskelligt i forskellige situationer
+* (**Genbrugelighed**: Skriv kode én gang, brug den mange gange)
+* (**Abstraktion**: Skjul komplekse detaljer bag simple grænseflader)
+* (**Modularitet**: Opdel store programmer i mindre, håndterbare dele)
+
+## Klasser og Objekter
+
+> Tænk på en klasse som en kageopskrift og objekter som de færdige kager.
 
 ```{python}
-# Hvilke data skal vi arbejde med?
-class Person:
-    navn, alder, køn
-
-class Elev(Person):
-    skole, klassetrin
-```
-
-# Hvordan interagerer brugeren?
-def main():
-    while True:
-        # Menu-system
-
-5. Test og fejlhåndtering
-try:
-    alder = int(alder)
-except ValueError:
-    print("⚠ Alder skal være et heltal.")
-
-```
-┌─────────────────────────────────────┐
-│   BRUGERINTERAKTION (main-loop)     │
-│   - Menu                             │
-│   - Input fra bruger                 │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│   FORRETNINGSLOGIK                   │
-│   - Tilføj person                    │
-│   - Opgrader til elev                │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│   DATALAG                            │
-│   - Person/Elev klasser              │
-│   - Validering                       │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
-│   PERSISTENSLAG                      │
-│   - Gem til CSV                      │
-│   - Indlæs fra CSV                   │
-└─────────────────────────────────────┘
-``` 
-
-```{python}
-START
-  ↓
-Indlæs eksisterende data fra CSV
-  ↓
-┌─────────────────┐
-│  Vis menu       │←──┐
-│  Få brugervalg  │   │
-└────────┬────────┘   │
-         ↓             │
-    ┌────────────┐    │
-    │ Valg 1-5?  │    │
-    └─┬──┬──┬──┬─┘    │
-      │  │  │  │      │
-   ┌──┘  │  │  └──┐   │
-   ↓     ↓  ↓     ↓   │
-Tilføj Vis Opg. Gem  │
-Person Liste Elev     │
-   │     │  │     │   │
-   └──┬──┴──┴─────┘   │
-      │               │
-      └───────────────┘
-         ↓
-    Valg 5 (Afslut)
-         ↓
-    Gem data
-         ↓
-       SLUT
-```
-
-ØVELSE: FIND ALGORITMERNE!
-
-```
-@alder.setter
-def alder(self, value):
-    try:
-        value = int(value)
-    except (TypeError, ValueError):
-        raise TypeError("Alder skal være et heltal") from None
-    if value < 0:
-        raise ValueError("Alder kan ikke være negativ")
-    self._alder = value
-```
-
-```
-1. Attempt to convert input to integer
-2. If conversion fails:
-   → Raise TypeError with message
-3. Check if value is negative
-4. If negative:
-   → Raise ValueError with message
-5. If all checks pass:
-   → Store value in _alder
-```
-
-SPG: Why It's an Algorithm
-This is a data validation algorithm because it:
-Has clear, ordered steps
-Makes decisions (conditional logic)
-Has defined inputs (the value) and outputs (validated value or error)
-Solves a specific problem: "ensure age is a valid non-negative integer"
-
-Where It's Used
-This algorithm runs automatically whenever you set the age:
-```
-p = Person(navn, alder, køn)  # Algorithm runs here
-# or
-p.alder = 25  # Algorithm runs here too
-```
-
-the decorator itself is a mechanism (part of Python's property system), but the code inside the setter is definitely an algorithm - specifically a validation algorithm that ensures data integrity.
-
-```
-
-```
-
-gem_personer_csv:
-```
-1. Determine the script directory path
-2. Combine directory with filename
-3. Open file for writing
-4. Write header row with field names
-5. For each person in the list:
-   - Extract person data
-   - Handle optional fields (skole, klassetrin)
-   - Write row to CSV
-6. Close file
-```
-
-Person Upgrade Algorithm (in menu option 3):
-```
-1. Filter list to find non-Elev persons
-2. Display filtered list to user
-3. Get user selection
-4. Validate selection
-5. Get school information from user
-6. Create new Elev object with existing person data + new school data
-7. Replace old Person object with new Elev object in list
-```
-
-
-Main Menu Loop Algorithm
-```
-1. Load existing data
-2. While program is running:
-   - Display menu
-   - Get user choice
-   - Execute corresponding action
-   - If "exit" chosen → save and break loop
-```
----->
-
-## Python og programmeringsparadigmer
-
-<!---
-
-1. Objektorienteret Programmering (OOP)
-
-```{python}
+#| eval: false
+#| echo: true
 class Person:
     def __init__(self, navn, alder, køn):
         self.navn = navn
@@ -337,65 +663,809 @@ class Person:
         self.køn = køn
 ```
 
-Organiserer data og funktionalitet sammen
-Genbrugelig kode (Elev arver fra Person)
-Modellerer virkeligheden
+* **Klassen** (opskriften) beskriver, hvordan noget skal laves
+* **Objektet** (kagen) er det konkrete resultat
 
-3. Encapsulation (Indkapsling)
+---
 
-@property
-def alder(self) -> int:
-    return self._alder
+1. Organiserer data og funktionalitet sammen
+2. Modellerer virkeligheden
 
-@alder.setter
-def alder(self, value):
-    # Kontrolleret adgang til data
-    # Validering sker automatisk
+```{python}
+#| eval: false
+#| echo: true
+# Dette er en klasse (opskriften)
+class Kage:
+    def __init__(self, smag, størrelse):
+        self.smag = smag          # Attribut
+        self.størrelse = størrelse # Attribut
+    
+    def bag(self):                # Metode
+        print(f"Bager en {self.størrelse} {self.smag}-kage!")
+
+# Dette er objekter (de færdige kager)
+chokoladekage = Kage("chokolade", "stor")
+citronkage = Kage("citron", "lille")
+
+# Vi kan bruge metoderne
+chokoladekage.bag()  # Output: Bager en stor chokolade-kage!
+```
+
+## Attributter og Metoder
+
+* **Attributter** = Egenskaber (hvad objektet HAR)
+* **Metoder** = Handlinger (hvad objektet kan GØRE)
+
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.6em;"}
+
+```{python}
+#| eval: false
+#| echo: true
+class Bil:
+    # Konstruktøren (__init__) kører når vi laver et nyt objekt
+    def __init__(self, mærke, farve, benzin_tank=50):
+        # Attributter (bilens egenskaber)
+        self.mærke = mærke
+        self.farve = farve
+        self.benzin = benzin_tank
+        self.kører = False
+        self.kilometer = 0
+    
+    # Metoder (hvad bilen kan gøre)
+    def start_motor(self):
+        if self.benzin > 0:
+            self.kører = True
+            print(f"{self.mærke} er startet! Brummm...")
+        else:
+            print("Ingen benzin! Tank bilen først.")
+    
+    def kør(self, distance):
+        if not self.kører:
+            print("Start motoren først!")
+            return
+        
+        benzin_forbrug = distance * 0.1  # 0.1 liter per km
+        
+        if self.benzin >= benzin_forbrug:
+            self.benzin -= benzin_forbrug
+            self.kilometer += distance
+            print(f"Kørte {distance} km. Benzin tilbage: {self.benzin:.1f} liter")
+        else:
+            print("Ikke nok benzin til denne tur!")
+    
+    def tank_op(self, liter):
+        self.benzin += liter
+        print(f"Tankede {liter} liter. Total benzin: {self.benzin} liter")
+    
+    def vis_status(self):
+        print(f"\n--- {self.mærke} Status ---")
+        print(f"Farve: {self.farve}")
+        print(f"Kilometer kørt: {self.kilometer}")
+        print(f"Benzin: {self.benzin:.1f} liter")
+        print(f"Motor status: {'Kører' if self.kører else 'Slukket'}")
+
+# bil-klasse i praksis
+min_bil = Bil("Toyota", "rød", 30)
+din_bil = Bil("Tesla", "blå", 40)
+
+# Test af forskellige metoder
+min_bil.vis_status()
+min_bil.start_motor()
+min_bil.kør(50)
+min_bil.tank_op(20)
+min_bil.kør(100)
+min_bil.vis_status()
+```
+:::
+:::
+
+---
+
+## Nedarvning (Inheritance) og indkapsling
+
+* Nedarvning er et hierarkisk forhold mellem klasser, hvor en "barn-klasse" (subklasse) arver egenskaber og metoder fra en "forældre-klasse" (superklasse).
+* Nedarvning repræsenterer et "er-en" forhold. En hund ER ET dyr, en bil ER ET køretøj.
+
+--- 
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.6em;"}
+```{python}
+#| eval: false
+#| echo: true
+class Dyr:  # Superklasse/Basis klasse
+    def __init__(self, navn, vægt):
+        self.navn = navn
+        self.vægt = vægt
+        self.levende = True
+    
+    def spis(self, mad):
+        print(f"{self.navn} spiser {mad}")
+        self.vægt += 0.1
+    
+    def sov(self):
+        print(f"{self.navn} sover...")
+    
+    def lav_lyd(self):
+        # Abstrakt metode: skal overskrives
+        raise NotImplementedError("Subklassen skal implementere lav_lyd()")
+
+class Hund(Dyr):  # Subklasse der arver fra Dyr
+    def __init__(self, navn, vægt, race):
+        super().__init__(navn, vægt)  # Kalder superklassens konstruktør
+        self.race = race
+    
+    def lav_lyd(self):
+        return "Vov vov!"
+    
+    def apporter(self):  # Hund-specifik metode
+        print(f"{self.navn} apporterer!")
+
+class Kat(Dyr):
+    def __init__(self, navn, vægt, pels_farve):
+        super().__init__(navn, vægt)
+        self.pels_farve = pels_farve
+    
+    def lav_lyd(self):
+        return "Miav!"
+    
+    def kradser(self):  # Kat-specifik metode
+        print(f"{self.navn} kradser på møblerne!")
+
+# Brug af nedarvning
+fido = Hund("Fido", 25, "Golden Retriever")
+misser = Kat("Misser", 4, "sort")
+
+# Begge kan bruge Dyr-metoderne
+fido.spis("hundemad")
+misser.sov()
+
+# Men hver har også sine egne specifikke metoder
+fido.apporter()
+misser.kradser()
+```
+:::
+:::
+
+# *Øvelse:* BESKRIV OG DOKUMENTER KODE 
+
+# Softwaredesign 
+
+## Formål 
+
+* Organisere din kode så den er nem at forstå og vedligeholde
+* Genbruge kode i stedet for at gentage dig selv
+* Samarbejde bedre med andre programmører
+* Finde og rette fejl hurtigere
+* Udvide dit program uden at ødelægge eksisterende funktionalitet
+
+## Succes-kriterier
+
+* Let at læse
+* Let at vedligeholde
+* Let at udvide
+* Let at fejlsøge
+
+## DRY (Don't Repeat Yourself)
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.0em;"}
+```{python}
+#| eval: false
+#| echo: true
+class Elev(Person):
+    def __init__(self, navn, alder, køn, skole, klassetrin):
+        super().__init__(navn, alder, køn)  # Genbruger Person's kode
+```
+<br>
+```{python}
+#| eval: false
+#| echo: true
+# DÅRLIGT: Gentagen kode
+def beregn_løn_direktør(timer, timeløn):
+    grundløn = timer * timeløn
+    bonus = grundløn * 0.20
+    return grundløn + bonus
+
+def beregn_løn_manager(timer, timeløn):
+    grundløn = timer * timeløn
+    bonus = grundløn * 0.15
+    return grundløn + bonus
+
+# GODT: Genbrugelig funktion
+def beregn_løn(timer, timeløn, bonus_procent):
+    grundløn = timer * timeløn
+    bonus = grundløn * bonus_procent
+    return grundløn + bonus
+```
+:::
+:::
+
+
+## Separation of Concerns
+
+Hver funktion har ét ansvar!
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.0em;"}
+```{python}
+#| eval: false
+#| echo: true
+gem_personer_csv() # Gemmer kun data!
+indlaes_personer_csv() # Indlæser kun data!
+main() - # Håndterer kun bruger fladen!
+```
+:::
+:::
+
+
+## KISS (Keep It Simple, Stupid)
+
+> Hold løsninger simple
+
+## YAGNI (You Aren't Gonna Need It)
+
+> Implementer kun det du har brug for nu
+
+
+
+
+
+
+
+
+<!---
+## SOLID Principperne
+
+SOLID er fem designprincipper der hjælper med at skabe vedligeholdelsesvenlig og skalerbar kode:
+
+1. **Single Responsibility Principle (SRP): En klasse bør kun have ét ansvar og én grund til at ændre sig.**
+2. Open/Closed Principle (OCP): Klasser bør være åbne for udvidelse men lukkede for modifikation.
+3. Liskov Substitution Principle (LSP): Subklasser skal kunne erstatte deres basis klasser uden at bryde programmets korrekthed.
+4. Interface Segregation Principle (ISP): Klienter bør ikke tvinges til at afhænge af interfaces de ikke bruger.
+5. Dependency Inversion Principle (DIP): Højniveau moduler bør ikke afhænge af lavniveau moduler. Begge bør afhænge af abstraktioner.
+
+
+--- 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.6em;"}
+```{python}
+#| eval: false
+#| echo: true
+# DÅRLIGT: Klassen har flere ansvarsområder
+class Bruger:
+    def __init__(self, navn, email):
+        self.navn = navn
+        self.email = email
+    
+    def gem_til_database(self):
+        # Database logik her
+        pass
+    
+    def send_email(self):
+        # Email logik her
+        pass
+```
+:::
+:::
+:::
+
+::: {.column width="50%"}
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.6em;"}
+```{python}
+#| eval: false
+#| echo: true
+# GODT: Opdelt i separate klasser med enkelt ansvar
+class Bruger:
+    def __init__(self, navn, email):
+        self.navn = navn
+        self.email = email
+
+class BrugerDatabase:
+    def gem(self, bruger):
+        # Kun database ansvar
+        pass
+
+class EmailService:
+    def send(self, bruger, besked):
+        # Kun email ansvar
+        pass
+```
+:::
+:::
+:::
+
+::::
 
 ---->
 
 
-# Øvelse 
 
-# Softwaredesign 
+## Best Practices Tjekliste
+
+* Er der klar separation of concerns?
+* Er koden DRY (ingen duplikering)?
+* Er navngivning konsistent og beskrivende?
+* Er der passende abstraktion?
+* Er koden testbar?
+* Er der dokumentation hvor nødvendigt?
+
+
+# Gennemgang af koden fra workshop 1
+
+---
+
+
+```{python}
+#| eval: false
+#| echo: true
+
+class Person:
+    def __init__(self, navn: str, alder: int, køn: str):
+        self.navn = navn
+        self.alder = alder   # kalder setter
+        self.køn = køn
+
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
+
+    @property
+    def alder(self) -> int:
+        return self._alder
+
+    @alder.setter
+    def alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
+```
+
+## `self`
+
+* `self` er ikke et nøgleord, men en konvention i Python.
+* Det er det første argument i instansmetoder, som refererer til det objekt, metoden bliver kaldt på.
+* Tænk på self som “dette specifikke objekt”
+* Uden self ved funktionen ikke, hvilket objekt den skal arbejde me
+
+
+Når vi kalder `p.alder()`, oversætter Python internt det til:
+
+```{python}
+#| eval: false
+#| echo: true
+Person.alder(p)
+```
+
+* `self.navn` = navn → gemmer den konkrete værdi på objektet.
+* `self.alder` = alder → kalder alder.setter via property, som igen bruger self._alder.
+* `self.køn` = køn → gemmer køn på objektet.
+
+--- 
+
+Uden `self` ville Python ikke vide, hvor attributterne skulle gemmes. De ville være lokale variabler i __init__.
+
+```{python}
+#| eval: false
+#| echo: true
+p = Person("Anna", 25, "F")
+Person.__init__(p, "Anna", 25, "F")
+# p bliver "self" inde i __init__
+```
+
+## Decorators (her, eks. på *validering*)
+
+* Python har indbyggede decorators som `@property`, `@classmethod`, `@staticmethod`.
+* En decorator er en slags "pakke" eller "tilføjelse", som du kan lægge ovenpå en funktion eller en klasse, uden at ændre selve koden inde i funktionen/klassen.
+* `@property` lader os bruge en metode som om den var en attribut og bruges ofte i **klasser**.
+
+```{python}
+#| eval: true
+#| echo: true
+class Cirkel:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @property
+    def areal(self):
+        return 3.14 * self._radius**2
+
+c = Cirkel(5)
+print(c.areal)  # ser ud som en variabel, men beregnes via en metode
+```
+
+---
+
+```{python}
+#| eval: true
+#| echo: true
+class Person:
+    def __init__(self, navn, fødselsår):
+        self.navn = navn
+        self.fødselsår = fødselsår
+
+    @property
+    def alder(self):
+        from datetime import datetime
+        år_nu = datetime.now().year
+        return år_nu - self.fødselsår
+
+p = Person("Anna", 2000)
+print(p.alder)   # ligner en attribut, men beregnes dynamisk
+```
+
+---
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{python}
+#| eval: false
+#| echo: true
+class Person:
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+    
+    def get_name(self):
+        return self._name
+    
+    def set_name(self, name):
+        self._name = name
+    
+    def get_age(self):
+        return self._age
+    
+    def set_age(self, age):
+        self._age = age
+
+# Brug:
+person = Person("Alice", 30)
+print(person.get_name())  # "Alice"
+person.set_age(31)
+print(person.get_age())   # 31
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+#| eval: false
+#| echo: true
+class PersonPythonic:
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        self._name = name
+    
+    @property
+    def age(self):
+        return self._age
+    
+    @age.setter
+    def age(self, age):
+        self._age = age
+
+# Brug - meget mere naturligt!
+person = PersonPythonic("Alice", 30)
+print(person.name)  # "Alice" - ser ud som en attribut!
+person.age = 31     # Naturlig assignment
+print(person.age)   # 31
+```
+:::
+
+::::
+
+* Vi bruger `@property` til at gøre alder til en kontrolleret attribut. Udadtil bruger kode person.alder som en almindelig attribut, men internt bliver der kørt funktion(er) (en getter og en setter):
+* `@property` laver en getter (læser funktion): når du læser p.alder, kaldes denne funktion og returnerer værdien.
+* `@alder.setter` binder en setter (skriver funktion): når vi skriver `p.alder = x`, kaldes denne funktion og kan validere/transformere `x` før den gemmes.
+* Den konkrete implementering bruger en bagvedliggende variabel `self._alder` til at gemme den faktiske værdi. Hvis ikke, ville det ende i uendelig rekursion.
+
+---
+
+```{python}
+#| eval: false
+#| echo: true
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.alder = alder   # <-- HER kaldes property.setter
+        self.køn = køn
+
+```
+
+* Når en Person instantieres, køres __init__.
+* `self.alder = alder` kalder den metode, som vi har defineret med `@alder.setter`. Setter’en validerer og skriver til `self._alder`.
+
+---
+
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 1.2em;"}
+```
+Kode:   p.alder = 25
+────────────────────────────
+
+   p.alder = 25
+      │
+      ▼
+  1. Python ser at 'alder' er et property-objekt
+     (og en data-descriptor, fordi fset findes)
+      │
+      ▼
+  2. Python kalder property.__set__(obj=p, value=25)
+      │
+      ▼
+  3. property.__set__ ser at fset er defineret
+      │
+      ▼
+  4. fset(self, value) kaldes
+      │
+      ▼
+  5. Din setter-kode kører:
+         value = int(value)
+         if value < 0: raise ValueError
+         self._alder = value
+
+```
+:::
+:::
 
 <!----
 
-Algoritmer = de individuelle funktioner der løser specifikke problemer
-Programmet = hele systemet der kombinerer algoritmer, klasser, menu, og filhåndtering til en fungerende applikation
+```
 
-1. DRY (Don't Repeat Yourself)
-class Elev(Person):
-    def __init__(self, navn, alder, køn, skole, klassetrin):
-        super().__init__(navn, alder, køn)  # Genbruger Person's kode
+   p.alder = 25
+      │
+      ▼
+1. Python ser at 'alder' er et property-objekt
+   → kalder property.__set__(obj=p, value=25)
+      │
+      ▼
+2. property.__set__ kalder fset(self, value)
+      │
+      ▼
+3. Din setter kører:
+       self.alder = int(value)
+      │
+      ▼
+4. self.alder = ... er IGEN en tildeling til property 'alder'
+   → Python kalder property.__set__(obj=p, value=int(value)) (igen!)
+      │
+      ▼
+5. property.__set__ kalder fset(self, value) (igen!)
+      │
+      ▼
+6. Din setter kører igen og forsøger self.alder = int(value)
+   → ... hvilket kalder property.__set__ igen!
+      │
+      ▼
+7. Dette gentager sig uendeligt
+      │
+      ▼
+8. Python når maksimal rekursionsdybde
+   → RecursionError: maximum recursion depth exceeded
 
-2. Separation of Concerns
-Hver funktion har ét ansvar:
+```
 
-gem_personer_csv() - kun gemme
-indlaes_personer_csv() - kun indlæse
-main() - kun håndtere menu/brugerinteraktion
+Fordi i setter’en prøver vi at sætte self.alder (som er property’en selv).
+→ Property’en kalder setter’en igen.
+→ Setter’en prøver igen at sætte self.alder.
+→ Loop uden ende.
+
 
 ----->
 
-# Gruppe arbejde
+---
 
+:::: {.columns}
 
+::: {.column width="50%"}
+```
+p.alder
+   │
+   ▼
+Person.alder.__get__(p, Person) ← (property.__get__)
+   │
+   ▼
+fget(self)                      ← (@property metode)
+   │
+   ▼
+return self._alder
+```
+:::
 
+::: {.column width="50%"}
+```
+p.alder = 25
+   │
+   ▼
+Person.alder.__set__(p, 25) ← (property.__set__)
+   │
+   ▼
+fset(self, value)           ← (@alder.setter metode)
+   │
+   ▼
+self._alder = 25
+```
+:::
 
+::::
 
+---
 
+Hvis vi ikke brugte `@property` og `@alder.setter`, kunne vi lave det samme “manuelt” således:
 
+:::: {.columns}
 
+::: {.column width="50%"}
+```{python}
+#| eval: false
+#| echo: true
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.set_alder(alder)   # vi kalder vores egen setter-metode manuelt
+        self.køn = køn
 
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.get_alder()}, Køn: {self.køn}"
 
+    def get_alder(self) -> int:
+        return self._alder
 
+    def set_alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
 
+p = Person("Anna", 25, "F")
+print(p.get_alder())   # vi SKAL kalde metoden selv
+p.set_alder(30)
+print(p.get_alder())
+```
+:::
 
+::: {.column width="50%"}
+```{python}
+class Person:
+    def __init__(self, navn: str, alder: int, køn: str):
+        self.navn = navn
+        self.alder = alder   # kalder setter
+        self.køn = køn
 
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
 
+    @property
+    def alder(self) -> int:
+        return self._alder
 
+    @alder.setter
+    def alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
+```
+:::
 
+::::
 
+---
 
+::: {style="display: flex; justify-content: center; align-items: center;"}
+::: {style="font-size: 0.5em;"}
+```
+
+                  p = Person("Anna", 25, "F")  <-- instans oprettes
+                                │
+                                ▼
+                __init__(self=p, navn="Anna", alder=25, køn="F")
+                                │
+        ┌───────────────────────┼────────────────────────────┐
+        │                       │                            │
+        ▼                       ▼                            ▼
+  self.navn = "Anna"      self.alder = 25            self.køn = "F"
+                            │
+                            ▼
+               property.__set__(Person.alder, obj=p, value=25)
+                            │
+                            ▼
+                 fset(self=p, value=25)  <-- setter-kald
+                            │
+                   ┌────────┴─────────┐
+                   │                  │
+             Prøv konvertere       TypeError?
+             value = int(value)      │
+                   │                  │
+                   ▼                  ▼
+               Success              Raise TypeError: "Alder skal være et heltal"
+                   │
+                   ▼
+            Tjek om value < 0?
+                   │
+          ┌────────┴─────────┐
+          ▼                  ▼
+      False                   True
+      │                       │
+      ▼                       ▼
+Gem i instans:           Raise ValueError: "Alder kan ikke være negativ"
+self._alder = value
+                            │
+                            ▼
+------------------------------------------------------
+# Læse flow (getter):
+
+p.alder  <-- bruger læser property
+   │
+   ▼
+property.__get__(Person.alder, obj=p, objtype=Person)
+   │
+   ▼
+fget(self=p)  <-- getter-kald
+   │
+   ▼
+return self._alder  <-- returnerer den validerede alder
+   │
+   ▼
+Resultat sendes tilbage til print / kald
+```
+:::
+:::
+
+## MEN VENT: Den Pythoniske Filosofi
+
+> "Start simpelt, refaktorer når nødvendigt
+
+```{python}
+#| eval: false
+#| echo: true
+# Start med:
+class User:
+    def __init__(self, name):
+        self.name = name  # Simpel attribut
+
+# DEREFTER udvid med validering:
+class User:
+    def __init__(self, name):
+        self.name = name
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, value):
+        if not value.strip():
+            raise ValueError("Navn kan ikke være tomt!")
+        self._name = value.strip().title()
+
+# Gammel kode virker stadig!
+```
+
+# *Mini-projekter!*
 
