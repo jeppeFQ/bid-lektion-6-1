@@ -53,8 +53,10 @@ format:
 3. Programmer og programmering
 4. Python og programmeringsparadigmer 
 
+---
+
 ::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| eval: false
 #| echo: true
