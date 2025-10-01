@@ -148,86 +148,6 @@ Eksempler:
 
 Producenten (e.g., Windows, MacOS) laver driver til deres hardware, så vi fx kan bruge vores printer til både vores MacBook såvel som ChromeBook. 
 
-## Algoritmer 
-
-En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen eller en (skatte)formular: Hvert trin skal være klart defineret og i den rigtige rækkefølge.
-
-```{bash}
-1. Fyld vand i kedel
-2. Kog vandet
-3. Læg tepose i kop
-4. Hæld kogende vand i koppen
-5. Vent 3-5 minutter
-6. Fjern tepose
-```
-
-## En god (brugbar) algoritme er eksplicit iht:
-
-* **Input**: Hvad får algoritmen at arbejde med?
-* **Output**: Hvad producerer algoritmen?
-* **Entydighed**: Hvert trin skal være præcist og utvetydigt
-* **Endelighed**: Algoritmen skal stoppe efter et endeligt antal trin
-* (**Effektivitet**: Algoritmen skal løse problemet på en effektiv måde)
-
----
-
-#### Søgealgoritmer
-
-```{python}
-#| eval: false
-#| echo: true
-# Find alle personer der ikke er elever
-ikke_elever = [p for p in personer if not isinstance(p, Elev)]
-```
-
-<br>
-
-#### Sorteringsalgoritmer
-
-```{python}
-#| eval: false
-#| echo: true
-# Sortér personer efter alder
-sorterede = sorted(personer, key=lambda p: p.alder)
-```
-
----
-
-#### Valideringsalgoritmer
-
-```{python}
-#| eval: false
-#| echo: true
-@alder.setter
-def alder(self, value):
-    try:
-        value = int(value)
-    except (TypeError, ValueError):
-        raise TypeError("Alder skal være et heltal") from None
-    if value < 0:
-        raise ValueError("Alder kan ikke være negativ")
-    self._alder = value
-```
-
-<br>
-
-::: {style="display: flex; justify-content: left; align-items: left;"}
-::: {style="font-size: 1em;"}
-```
-INPUT: value (ukendt datatype)
-
-TRIN:
-1. FORSØG at konvertere value til heltal
-2. HVIS konvertering fejler:
-   → Kast fejl: "Alder skal være et heltal"
-3. HVIS value er negativ:
-   → Kast fejl: "Alder kan ikke være negativ"
-4. Gem value i _alder
-
-OUTPUT: Valideret alder eller fejlmeddelelse
-```
-:::
-:::
 
 ## OS 
 
@@ -414,6 +334,87 @@ MinProjekt/
 * Brug relative stier i koden 
 * Læg ikke store datafiler i Git/GitHub---brug .gitignore
 
+
+## Algoritmer 
+
+En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen eller en (skatte)formular: Hvert trin skal være klart defineret og i den rigtige rækkefølge.
+
+```{bash}
+1. Fyld vand i kedel
+2. Kog vandet
+3. Læg tepose i kop
+4. Hæld kogende vand i koppen
+5. Vent 3-5 minutter
+6. Fjern tepose
+```
+
+## En god (brugbar) algoritme er eksplicit iht:
+
+* **Input**: Hvad får algoritmen at arbejde med?
+* **Output**: Hvad producerer algoritmen?
+* **Entydighed**: Hvert trin skal være præcist og utvetydigt
+* **Endelighed**: Algoritmen skal stoppe efter et endeligt antal trin
+* (**Effektivitet**: Algoritmen skal løse problemet på en effektiv måde)
+
+---
+
+#### Søgealgoritmer
+
+```{python}
+#| eval: false
+#| echo: true
+# Find alle personer der ikke er elever
+ikke_elever = [p for p in personer if not isinstance(p, Elev)]
+```
+
+<br>
+
+#### Sorteringsalgoritmer
+
+```{python}
+#| eval: false
+#| echo: true
+# Sortér personer efter alder
+sorterede = sorted(personer, key=lambda p: p.alder)
+```
+
+---
+
+#### Valideringsalgoritmer
+
+```{python}
+#| eval: false
+#| echo: true
+@alder.setter
+def alder(self, value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise TypeError("Alder skal være et heltal") from None
+    if value < 0:
+        raise ValueError("Alder kan ikke være negativ")
+    self._alder = value
+```
+
+<br>
+
+::: {style="display: flex; justify-content: left; align-items: left;"}
+::: {style="font-size: 1em;"}
+```
+INPUT: value (ukendt datatype)
+
+TRIN:
+1. FORSØG at konvertere value til heltal
+2. HVIS konvertering fejler:
+   → Kast fejl: "Alder skal være et heltal"
+3. HVIS value er negativ:
+   → Kast fejl: "Alder kan ikke være negativ"
+4. Gem value i _alder
+
+OUTPUT: Valideret alder eller fejlmeddelelse
+```
+:::
+:::
 
 ## Programmer og programmering 
 
