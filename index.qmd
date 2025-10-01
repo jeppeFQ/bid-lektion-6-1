@@ -48,8 +48,8 @@ format:
 
 ## Opsamling og opsummering af "Software"
 
-1. Algoritmer
-2. (OS'er: lagring af data, filhåndtering)
+1. OS'er: lagring af data, filhåndtering
+2. Algoritmer
 3. Programmer og programmering
 4. Python og programmeringsparadigmer 
 
