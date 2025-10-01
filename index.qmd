@@ -1,0 +1,401 @@
+---
+title: "Titel"
+subtitle: ""
+author: "Jeppe Fjeldgaard Qvist"
+date: today
+format: 
+  revealjs:
+    #include-after-body: "resources/timer.html"
+    navigation-mode: linear
+    slide-number: c
+    show-slide-number: print
+    embed-resources: true
+    self-contained-math: true
+    smaller: true
+    scrollable: true
+    theme: default
+    include-in-header: 
+      - text: |
+          <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+          <style>
+          .reveal {
+            font-family: "Libre Baskerville", serif !important;
+          }
+          .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+            font-family: "Libre Baskerville", serif !important;
+          }
+          .reveal .slides section {
+            overflow: visible !important;
+          }
+          .reveal ul, .reveal ol {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+            overflow: visible !important;
+          }
+          .reveal li {
+            margin-bottom: 0.25em;
+            overflow: visible !important;
+          }
+          </style>
+---
+
+## Dagens program
+
+1. Opsamling og opsummering af "Software" (Kap. 4-7 i grundbogen)
+2. Øvelse m. eksamensspg. 
+3. **Softwaredesign**
+4. Gruppearbejde (mini-projekter)
+
+## Opsamling og opsummering af "Software"
+
+1. Algoritmer
+2. Programmer og programmering
+3. (OS'er: lagring af data, filhåndtering)
+4. Python og programmeringsparadigmer 
+
+```{python}
+#| eval: false
+#| echo: true
+
+class Person:
+    def __init__(self, navn: str, alder: int, køn: str):
+        self.navn = navn
+        self.alder = alder   # kalder setter
+        self.køn = køn
+
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
+
+    @property
+    def alder(self) -> int:
+        return self._alder
+
+    @alder.setter
+    def alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
+```
+
+
+## Algoritmer 
+
+<!---
+En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen - hver trin skal være klart defineret og i den rigtige rækkefølge.
+
+```
+1. Fyld vand i kedel
+2. Kog vandet
+3. Læg tepose i kop
+4. Hæld kogende vand i koppen
+5. Vent 3-5 minutter
+6. Fjern tepose
+```
+
+Kendetegn ved en god algoritme
+
+Input: Hvad får algoritmen at arbejde med?
+Output: Hvad producerer algoritmen?
+Entydighed: Hvert trin skal være præcist og utvetydigt
+Endelighed: Algoritmen skal stoppe efter et endeligt antal trin
+Effektivitet: Algoritmen skal løse problemet på en fornuftig måde
+
+```
+@alder.setter
+def alder(self, value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise TypeError("Alder skal være et heltal") from None
+    if value < 0:
+        raise ValueError("Alder kan ikke være negativ")
+    self._alder = value
+```
+
+```
+INPUT: value (ukendt datatype)
+
+TRIN:
+1. FORSØG at konvertere value til heltal
+2. HVIS konvertering fejler:
+   → Kast fejl: "Alder skal være et heltal"
+3. HVIS value er negativ:
+   → Kast fejl: "Alder kan ikke være negativ"
+4. Gem value i _alder
+
+OUTPUT: Valideret alder eller fejlmeddelelse
+```
+
+1. Søgealgoritmer - Find noget i en samling
+# Find alle personer der ikke er elever
+ikke_elever = [p for p in personer if not isinstance(p, Elev)]
+
+3. Sorteringsalgoritmer - Arranger data i orden
+# Sortér personer efter alder
+sorterede = sorted(personer, key=lambda p: p.alder)
+
+
+---->
+
+## Programmer og programmering 
+
+<!---
+A program is the complete executable code that solves a problem - it includes algorithms, data structures, user interface, file handling, error handling, etc.
+An algorithm is a step-by-step procedure or set of rules to solve a specific problem or perform a specific task. It's like a recipe
+
+Your program is the entire Python file, while the algorithms are the specific problem-solving procedures within it. Each function typically contains one or more algorithms. The program orchestrates these algorithms together with data structures (Person, Elev classes), user interaction, and file I/O to create a complete application.
+
+Hvad er et program?
+Et program er en komplet, eksekverbar løsning der kombinerer:
+
+Algoritmer (problemløsning)
+Datastrukturer (organisering af data)
+Brugergrænseflade (interaktion med brugeren)
+Fejlhåndtering (håndtering af uventede situationer)
+I/O operationer (læsning/skrivning af data)
+
+Hvad skal programmet kunne?
+- Registrere personer
+- Opgradere personer til elever
+- Gemme og indlæse data
+
+2. Design af datastrukturer
+
+```{python}
+# Hvilke data skal vi arbejde med?
+class Person:
+    navn, alder, køn
+
+class Elev(Person):
+    skole, klassetrin
+```
+
+# Hvordan interagerer brugeren?
+def main():
+    while True:
+        # Menu-system
+
+5. Test og fejlhåndtering
+try:
+    alder = int(alder)
+except ValueError:
+    print("⚠ Alder skal være et heltal.")
+
+```
+┌─────────────────────────────────────┐
+│   BRUGERINTERAKTION (main-loop)     │
+│   - Menu                             │
+│   - Input fra bruger                 │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│   FORRETNINGSLOGIK                   │
+│   - Tilføj person                    │
+│   - Opgrader til elev                │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│   DATALAG                            │
+│   - Person/Elev klasser              │
+│   - Validering                       │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│   PERSISTENSLAG                      │
+│   - Gem til CSV                      │
+│   - Indlæs fra CSV                   │
+└─────────────────────────────────────┘
+``` 
+
+```{python}
+START
+  ↓
+Indlæs eksisterende data fra CSV
+  ↓
+┌─────────────────┐
+│  Vis menu       │←──┐
+│  Få brugervalg  │   │
+└────────┬────────┘   │
+         ↓             │
+    ┌────────────┐    │
+    │ Valg 1-5?  │    │
+    └─┬──┬──┬──┬─┘    │
+      │  │  │  │      │
+   ┌──┘  │  │  └──┐   │
+   ↓     ↓  ↓     ↓   │
+Tilføj Vis Opg. Gem  │
+Person Liste Elev     │
+   │     │  │     │   │
+   └──┬──┴──┴─────┘   │
+      │               │
+      └───────────────┘
+         ↓
+    Valg 5 (Afslut)
+         ↓
+    Gem data
+         ↓
+       SLUT
+```
+
+ØVELSE: FIND ALGORITMERNE!
+
+```
+@alder.setter
+def alder(self, value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise TypeError("Alder skal være et heltal") from None
+    if value < 0:
+        raise ValueError("Alder kan ikke være negativ")
+    self._alder = value
+```
+
+```
+1. Attempt to convert input to integer
+2. If conversion fails:
+   → Raise TypeError with message
+3. Check if value is negative
+4. If negative:
+   → Raise ValueError with message
+5. If all checks pass:
+   → Store value in _alder
+```
+
+SPG: Why It's an Algorithm
+This is a data validation algorithm because it:
+Has clear, ordered steps
+Makes decisions (conditional logic)
+Has defined inputs (the value) and outputs (validated value or error)
+Solves a specific problem: "ensure age is a valid non-negative integer"
+
+Where It's Used
+This algorithm runs automatically whenever you set the age:
+```
+p = Person(navn, alder, køn)  # Algorithm runs here
+# or
+p.alder = 25  # Algorithm runs here too
+```
+
+the decorator itself is a mechanism (part of Python's property system), but the code inside the setter is definitely an algorithm - specifically a validation algorithm that ensures data integrity.
+
+```
+
+```
+
+gem_personer_csv:
+```
+1. Determine the script directory path
+2. Combine directory with filename
+3. Open file for writing
+4. Write header row with field names
+5. For each person in the list:
+   - Extract person data
+   - Handle optional fields (skole, klassetrin)
+   - Write row to CSV
+6. Close file
+```
+
+Person Upgrade Algorithm (in menu option 3):
+```
+1. Filter list to find non-Elev persons
+2. Display filtered list to user
+3. Get user selection
+4. Validate selection
+5. Get school information from user
+6. Create new Elev object with existing person data + new school data
+7. Replace old Person object with new Elev object in list
+```
+
+
+Main Menu Loop Algorithm
+```
+1. Load existing data
+2. While program is running:
+   - Display menu
+   - Get user choice
+   - Execute corresponding action
+   - If "exit" chosen → save and break loop
+```
+---->
+
+## Python og programmeringsparadigmer
+
+<!---
+
+1. Objektorienteret Programmering (OOP)
+
+```{python}
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.alder = alder
+        self.køn = køn
+```
+
+Organiserer data og funktionalitet sammen
+Genbrugelig kode (Elev arver fra Person)
+Modellerer virkeligheden
+
+3. Encapsulation (Indkapsling)
+
+@property
+def alder(self) -> int:
+    return self._alder
+
+@alder.setter
+def alder(self, value):
+    # Kontrolleret adgang til data
+    # Validering sker automatisk
+
+---->
+
+
+# Øvelse 
+
+# Softwaredesign 
+
+<!----
+
+Algoritmer = de individuelle funktioner der løser specifikke problemer
+Programmet = hele systemet der kombinerer algoritmer, klasser, menu, og filhåndtering til en fungerende applikation
+
+1. DRY (Don't Repeat Yourself)
+class Elev(Person):
+    def __init__(self, navn, alder, køn, skole, klassetrin):
+        super().__init__(navn, alder, køn)  # Genbruger Person's kode
+
+2. Separation of Concerns
+Hver funktion har ét ansvar:
+
+gem_personer_csv() - kun gemme
+indlaes_personer_csv() - kun indlæse
+main() - kun håndtere menu/brugerinteraktion
+
+----->
+
+# Gruppe arbejde
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
