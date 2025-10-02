@@ -1,0 +1,2116 @@
+---
+title: "Titel"
+subtitle: ""
+author: "Jeppe Fjeldgaard Qvist"
+date: today
+format: 
+  revealjs:
+    #include-after-body: "resources/timer.html"
+    navigation-mode: linear
+    slide-number: c
+    show-slide-number: print
+    embed-resources: true
+    self-contained-math: true
+    smaller: true
+    scrollable: true
+    theme: default
+    include-in-header: 
+      - text: |
+          <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+          <style>
+          .reveal {
+            font-family: "Libre Baskerville", serif !important;
+          }
+          .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+            font-family: "Libre Baskerville", serif !important;
+          }
+          .reveal .slides section {
+            overflow: visible !important;
+          }
+          .reveal ul, .reveal ol {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+            overflow: visible !important;
+          }
+          .reveal li {
+            margin-bottom: 0.25em;
+            overflow: visible !important;
+          }
+          </style>
+---
+
+## Dagens program
+
+1. Opsamling og opsummering af "Software" (Kap. 4-7 i grundbogen)
+2. Øvelse m. eksamensspg. 
+3. **Softwaredesign**
+4. Gruppearbejde (mini-projekter)
+
+## Opsamling og opsummering af "Software"
+
+1. Algoritmer
+2. Programmer og programmering
+3. (OS'er: lagring af data, filhåndtering)
+4. Python og programmeringsparadigmer 
+
+```{python}
+#| eval: false
+#| echo: true
+
+class Person:
+    def __init__(self, navn: str, alder: int, køn: str):
+        self.navn = navn
+        self.alder = alder   # kalder setter
+        self.køn = køn
+
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
+
+    @property
+    def alder(self) -> int:
+        return self._alder
+
+    @alder.setter
+    def alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
+```
+
+
+## Algoritmer 
+
+<!---
+En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen - hver trin skal være klart defineret og i den rigtige rækkefølge.
+
+```
+1. Fyld vand i kedel
+2. Kog vandet
+3. Læg tepose i kop
+4. Hæld kogende vand i koppen
+5. Vent 3-5 minutter
+6. Fjern tepose
+```
+
+Kendetegn ved en god algoritme
+
+Input: Hvad får algoritmen at arbejde med?
+Output: Hvad producerer algoritmen?
+Entydighed: Hvert trin skal være præcist og utvetydigt
+Endelighed: Algoritmen skal stoppe efter et endeligt antal trin
+Effektivitet: Algoritmen skal løse problemet på en fornuftig måde
+
+```
+@alder.setter
+def alder(self, value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise TypeError("Alder skal være et heltal") from None
+    if value < 0:
+        raise ValueError("Alder kan ikke være negativ")
+    self._alder = value
+```
+
+```
+INPUT: value (ukendt datatype)
+
+TRIN:
+1. FORSØG at konvertere value til heltal
+2. HVIS konvertering fejler:
+   → Kast fejl: "Alder skal være et heltal"
+3. HVIS value er negativ:
+   → Kast fejl: "Alder kan ikke være negativ"
+4. Gem value i _alder
+
+OUTPUT: Valideret alder eller fejlmeddelelse
+```
+
+1. Søgealgoritmer - Find noget i en samling
+# Find alle personer der ikke er elever
+ikke_elever = [p for p in personer if not isinstance(p, Elev)]
+
+3. Sorteringsalgoritmer - Arranger data i orden
+# Sortér personer efter alder
+sorterede = sorted(personer, key=lambda p: p.alder)
+
+
+---->
+
+## Programmer og programmering 
+
+<!---
+A program is the complete executable code that solves a problem - it includes algorithms, data structures, user interface, file handling, error handling, etc.
+An algorithm is a step-by-step procedure or set of rules to solve a specific problem or perform a specific task. It's like a recipe
+
+Your program is the entire Python file, while the algorithms are the specific problem-solving procedures within it. Each function typically contains one or more algorithms. The program orchestrates these algorithms together with data structures (Person, Elev classes), user interaction, and file I/O to create a complete application.
+
+Hvad er et program?
+Et program er en komplet, eksekverbar løsning der kombinerer:
+
+Algoritmer (problemløsning)
+Datastrukturer (organisering af data)
+Brugergrænseflade (interaktion med brugeren)
+Fejlhåndtering (håndtering af uventede situationer)
+I/O operationer (læsning/skrivning af data)
+
+Hvad skal programmet kunne?
+- Registrere personer
+- Opgradere personer til elever
+- Gemme og indlæse data
+
+2. Design af datastrukturer
+
+```{python}
+# Hvilke data skal vi arbejde med?
+class Person:
+    navn, alder, køn
+
+class Elev(Person):
+    skole, klassetrin
+```
+
+# Hvordan interagerer brugeren?
+def main():
+    while True:
+        # Menu-system
+
+5. Test og fejlhåndtering
+try:
+    alder = int(alder)
+except ValueError:
+    print("⚠ Alder skal være et heltal.")
+
+```
+┌─────────────────────────────────────┐
+│   BRUGERINTERAKTION (main-loop)     │
+│   - Menu                             │
+│   - Input fra bruger                 │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│   FORRETNINGSLOGIK                   │
+│   - Tilføj person                    │
+│   - Opgrader til elev                │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│   DATALAG                            │
+│   - Person/Elev klasser              │
+│   - Validering                       │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│   PERSISTENSLAG                      │
+│   - Gem til CSV                      │
+│   - Indlæs fra CSV                   │
+└─────────────────────────────────────┘
+``` 
+
+```{python}
+START
+  ↓
+Indlæs eksisterende data fra CSV
+  ↓
+┌─────────────────┐
+│  Vis menu       │←──┐
+│  Få brugervalg  │   │
+└────────┬────────┘   │
+         ↓             │
+    ┌────────────┐    │
+    │ Valg 1-5?  │    │
+    └─┬──┬──┬──┬─┘    │
+      │  │  │  │      │
+   ┌──┘  │  │  └──┐   │
+   ↓     ↓  ↓     ↓   │
+Tilføj Vis Opg. Gem  │
+Person Liste Elev     │
+   │     │  │     │   │
+   └──┬──┴──┴─────┘   │
+      │               │
+      └───────────────┘
+         ↓
+    Valg 5 (Afslut)
+         ↓
+    Gem data
+         ↓
+       SLUT
+```
+
+ØVELSE: FIND ALGORITMERNE!
+
+```
+@alder.setter
+def alder(self, value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise TypeError("Alder skal være et heltal") from None
+    if value < 0:
+        raise ValueError("Alder kan ikke være negativ")
+    self._alder = value
+```
+
+```
+1. Attempt to convert input to integer
+2. If conversion fails:
+   → Raise TypeError with message
+3. Check if value is negative
+4. If negative:
+   → Raise ValueError with message
+5. If all checks pass:
+   → Store value in _alder
+```
+
+SPG: Why It's an Algorithm
+This is a data validation algorithm because it:
+Has clear, ordered steps
+Makes decisions (conditional logic)
+Has defined inputs (the value) and outputs (validated value or error)
+Solves a specific problem: "ensure age is a valid non-negative integer"
+
+Where It's Used
+This algorithm runs automatically whenever you set the age:
+```
+p = Person(navn, alder, køn)  # Algorithm runs here
+# or
+p.alder = 25  # Algorithm runs here too
+```
+
+the decorator itself is a mechanism (part of Python's property system), but the code inside the setter is definitely an algorithm - specifically a validation algorithm that ensures data integrity.
+
+```
+
+```
+
+gem_personer_csv:
+```
+1. Determine the script directory path
+2. Combine directory with filename
+3. Open file for writing
+4. Write header row with field names
+5. For each person in the list:
+   - Extract person data
+   - Handle optional fields (skole, klassetrin)
+   - Write row to CSV
+6. Close file
+```
+
+Person Upgrade Algorithm (in menu option 3):
+```
+1. Filter list to find non-Elev persons
+2. Display filtered list to user
+3. Get user selection
+4. Validate selection
+5. Get school information from user
+6. Create new Elev object with existing person data + new school data
+7. Replace old Person object with new Elev object in list
+```
+
+
+Main Menu Loop Algorithm
+```
+1. Load existing data
+2. While program is running:
+   - Display menu
+   - Get user choice
+   - Execute corresponding action
+   - If "exit" chosen → save and break loop
+```
+---->
+
+## Python og programmeringsparadigmer
+
+<!---
+
+1. Objektorienteret Programmering (OOP)
+
+Opsummering: De vigtigste OOP-principper
+
+Indkapsling: Hold data og metoder sammen i klasser
+Genbrugelighed: Skriv kode én gang, brug den mange gange
+Modularitet: Opdel store programmer i mindre, håndterbare dele
+Abstraktion: Skjul komplekse detaljer bag simple grænseflader
+Nedarvning: Klasser der bygger videre på andre klasser
+Polymorfisme: Objekter der kan opføre sig forskelligt i forskellige situationer
+Komposition: Objekter der indeholder andre objekter
+
+```{python}
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.alder = alder
+        self.køn = køn
+```
+
+Organiserer data og funktionalitet sammen
+Genbrugelig kode (Elev arver fra Person)
+Modellerer virkeligheden
+
+Klasser og Objekter
+Analogi: Tænk på en klasse som en kageopskrift og objekter som de færdige kager.
+
+Klassen (opskriften) beskriver, hvordan noget skal laves
+Objektet (kagen) er det konkrete resultat
+
+```{python}
+# Dette er en klasse (opskriften)
+class Kage:
+    def __init__(self, smag, størrelse):
+        self.smag = smag          # Attribut
+        self.størrelse = størrelse # Attribut
+    
+    def bag(self):                # Metode
+        print(f"Bager en {self.størrelse} {self.smag}-kage!")
+
+# Dette er objekter (de færdige kager)
+chokoladekage = Kage("chokolade", "stor")
+citronkage = Kage("citron", "lille")
+
+# Vi kan bruge metoderne
+chokoladekage.bag()  # Output: Bager en stor chokolade-kage!
+```
+
+
+Attributter og Metoder
+
+Attributter = Egenskaber (hvad objektet HAR)
+Metoder = Handlinger (hvad objektet kan GØRE)
+
+Et praktisk eksempel: En simpel Bil-klasse
+
+```{python}
+class Bil:
+    # Konstruktøren (__init__) kører når vi laver et nyt objekt
+    def __init__(self, mærke, farve, benzin_tank=50):
+        # Attributter (bilens egenskaber)
+        self.mærke = mærke
+        self.farve = farve
+        self.benzin = benzin_tank
+        self.kører = False
+        self.kilometer = 0
+    
+    # Metoder (hvad bilen kan gøre)
+    def start_motor(self):
+        if self.benzin > 0:
+            self.kører = True
+            print(f"{self.mærke} er startet! Brummm...")
+        else:
+            print("Ingen benzin! Tank bilen først.")
+    
+    def kør(self, distance):
+        if not self.kører:
+            print("Start motoren først!")
+            return
+        
+        benzin_forbrug = distance * 0.1  # 0.1 liter per km
+        
+        if self.benzin >= benzin_forbrug:
+            self.benzin -= benzin_forbrug
+            self.kilometer += distance
+            print(f"Kørte {distance} km. Benzin tilbage: {self.benzin:.1f} liter")
+        else:
+            print("Ikke nok benzin til denne tur!")
+    
+    def tank_op(self, liter):
+        self.benzin += liter
+        print(f"Tankede {liter} liter. Total benzin: {self.benzin} liter")
+    
+    def vis_status(self):
+        print(f"\n--- {self.mærke} Status ---")
+        print(f"Farve: {self.farve}")
+        print(f"Kilometer kørt: {self.kilometer}")
+        print(f"Benzin: {self.benzin:.1f} liter")
+        print(f"Motor status: {'Kører' if self.kører else 'Slukket'}")
+
+# Lad os prøve vores bil-klasse!
+min_bil = Bil("Toyota", "rød", 30)
+din_bil = Bil("Tesla", "blå", 40)
+
+# Test forskellige metoder
+min_bil.vis_status()
+min_bil.start_motor()
+min_bil.kør(50)
+min_bil.tank_op(20)
+min_bil.kør(100)
+min_bil.vis_status()
+```
+
+```{python}
+class Bog:
+    def __init__(self, titel, forfatter, isbn):
+        self.titel = titel
+        self.forfatter = forfatter
+        self.isbn = isbn
+        self.udlånt = False
+    
+    def lån_ud(self):
+        if not self.udlånt:
+            self.udlånt = True
+            print(f"'{self.titel}' er nu udlånt")
+            return True
+        else:
+            print(f"'{self.titel}' er allerede udlånt")
+            return False
+    
+    def aflever(self):
+        self.udlånt = False
+        print(f"'{self.titel}' er afleveret tilbage")
+
+class Bibliotek:
+    def __init__(self, navn):
+        self.navn = navn
+        self.bøger = []  # Liste til at gemme bog-objekter
+    
+    def tilføj_bog(self, bog):
+        self.bøger.append(bog)
+        print(f"Tilføjede '{bog.titel}' til {self.navn}")
+    
+    def vis_tilgængelige_bøger(self):
+        print(f"\n--- Tilgængelige bøger i {self.navn} ---")
+        for bog in self.bøger:
+            if not bog.udlånt:
+                print(f"• {bog.titel} af {bog.forfatter}")
+    
+    def find_bog(self, titel):
+        for bog in self.bøger:
+            if bog.titel.lower() == titel.lower():
+                return bog
+        return None
+
+# Prøv det selv!
+bibliotek = Bibliotek("Stadsbiblioteket")
+
+# Tilføj bøger
+bog1 = Bog("Harry Potter", "J.K. Rowling", "123456")
+bog2 = Bog("Ringenes Herre", "Tolkien", "789012")
+bog3 = Bog("1984", "George Orwell", "345678")
+
+bibliotek.tilføj_bog(bog1)
+bibliotek.tilføj_bog(bog2)
+bibliotek.tilføj_bog(bog3)
+
+# Test systemet
+bibliotek.vis_tilgængelige_bøger()
+bog1.lån_ud()
+bibliotek.vis_tilgængelige_bøger()
+bog1.aflever()
+```
+
+Nedarvning (Inheritance)
+Konceptuel Forståelse
+Nedarvning er et hierarkisk forhold mellem klasser, hvor en "barn-klasse" (subklasse) arver egenskaber og metoder fra en "forældre-klasse" (superklasse).
+Teoretisk grundlag: Nedarvning repræsenterer et "er-en" forhold. En hund ER ET dyr, en bil ER ET køretøj.
+
+```{python}
+class Dyr:  # Superklasse/Basis klasse
+    def __init__(self, navn, vægt):
+        self.navn = navn
+        self.vægt = vægt
+        self.levende = True
+    
+    def spis(self, mad):
+        print(f"{self.navn} spiser {mad}")
+        self.vægt += 0.1
+    
+    def sov(self):
+        print(f"{self.navn} sover...")
+    
+    def lav_lyd(self):
+        # Abstrakt metode - skal overskrives
+        raise NotImplementedError("Subklassen skal implementere lav_lyd()")
+
+class Hund(Dyr):  # Subklasse der arver fra Dyr
+    def __init__(self, navn, vægt, race):
+        super().__init__(navn, vægt)  # Kalder superklassens konstruktør
+        self.race = race
+    
+    def lav_lyd(self):
+        return "Vov vov!"
+    
+    def apporter(self):  # Hund-specifik metode
+        print(f"{self.navn} apporterer!")
+
+class Kat(Dyr):
+    def __init__(self, navn, vægt, pels_farve):
+        super().__init__(navn, vægt)
+        self.pels_farve = pels_farve
+    
+    def lav_lyd(self):
+        return "Miav!"
+    
+    def kradser(self):  # Kat-specifik metode
+        print(f"{self.navn} kradser på møblerne!")
+
+# Brug af nedarvning
+fido = Hund("Fido", 25, "Golden Retriever")
+misser = Kat("Misser", 4, "sort")
+
+# Begge kan bruge Dyr-metoderne
+fido.spis("hundemad")
+misser.sov()
+
+# Men hver har også sine egne specifikke metoder
+fido.apporter()
+misser.kradser()
+```
+
+
+Del 3: Polymorfisme
+Teoretisk Koncept
+Polymorfisme betyder "mange former" og tillader objekter af forskellige typer at blive behandlet ensartet gennem en fælles grænseflade.
+Tre typer polymorfisme:
+
+Method Overriding - Subklasser omdefinerer superklassens metoder
+Method Overloading - Samme metode med forskellige parametre (Python bruger default values)
+Duck Typing - "If it walks like a duck and quacks like a duck, it's a duck"
+
+```{python}
+from abc import ABC, abstractmethod
+
+# Abstrakt basis klasse definerer kontrakten
+class Form(ABC):
+    @abstractmethod
+    def beregn_areal(self):
+        pass
+    
+    @abstractmethod
+    def beregn_omkreds(self):
+        pass
+
+class Rektangel(Form):
+    def __init__(self, bredde, højde):
+        self.bredde = bredde
+        self.højde = højde
+    
+    def beregn_areal(self):
+        return self.bredde * self.højde
+    
+    def beregn_omkreds(self):
+        return 2 * (self.bredde + self.højde)
+
+class Cirkel(Form):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def beregn_areal(self):
+        return 3.14159 * self.radius ** 2
+    
+    def beregn_omkreds(self):
+        return 2 * 3.14159 * self.radius
+
+class Trekant(Form):
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+    
+    def beregn_areal(self):
+        # Herons formel
+        s = (self.a + self.b + self.c) / 2
+        return (s * (s - self.a) * (s - self.b) * (s - self.c)) ** 0.5
+    
+    def beregn_omkreds(self):
+        return self.a + self.b + self.c
+
+# Polymorfisk funktion
+def print_form_info(form):
+    """Denne funktion virker med ALLE Form objekter"""
+    print(f"{form.__class__.__name__}:")
+    print(f"  Areal: {form.beregn_areal():.2f}")
+    print(f"  Omkreds: {form.beregn_omkreds():.2f}")
+
+# Polymorfisme i praksis
+former = [
+    Rektangel(5, 3),
+    Cirkel(4),
+    Trekant(3, 4, 5)
+]
+
+for form in former:
+    print_form_info(form)  # Samme kode håndterer forskellige typer
+    print()
+```
+
+Del 4: Komposition vs Nedarvning
+"Favor Composition Over Inheritance"
+Dette er et vigtigt designprincip. Komposition repræsenterer et "har-en" forhold i stedet for "er-en".
+
+3. Encapsulation (Indkapsling)
+
+@property
+def alder(self) -> int:
+    return self._alder
+
+@alder.setter
+def alder(self, value):
+    # Kontrolleret adgang til data
+    # Validering sker automatisk
+
+---->
+
+
+# Øvelse 
+
+# Softwaredesign 
+
+<!----
+
+Python software design er afgørende for at bygge skalerbare, vedligeholdelige applikationer.
+
+Algoritmer = de individuelle funktioner der løser specifikke problemer
+Programmet = hele systemet der kombinerer algoritmer, klasser, menu, og filhåndtering til en fungerende applikation
+
+Forestil dig, at du skal bygge et hus uden tegninger eller plan - det ville blive kaotisk! Software design er som arkitektens tegninger for dit program. Det hjælper dig med at:
+
+Organisere din kode så den er nem at forstå og vedligeholde
+Genbruge kode i stedet for at gentage dig selv
+Samarbejde bedre med andre programmører
+Finde og rette fejl hurtigere
+Udvide dit program uden at ødelægge eksisterende funktionalitet
+
+God software design handler om at gøre din kode:
+
+Let at læse
+Let at vedligeholde
+Let at udvide
+Let at fejlsøge
+
+
+
+Designprocessen
+
+Analysér problemet - Forstå domænet og kravene
+Identificér objekter og relationer - Hvad er substantiver (klasser) og verber (metoder)?
+Definer grænseflader - Hvordan kommunikerer objekterne?
+Implementér gradvist - Start simpelt, refaktorer ofte
+Test kontinuerligt - Design med testbarhed i tankerne
+
+Arkitekturelle Overvejelser
+
+Cohesion: Hvor tæt relaterede er elementerne i en klasse?
+Coupling: Hvor afhængige er klasserne af hinanden?
+Skalerbarhed: Kan systemet vokse uden store ændringer?
+Vedligeholdelse: Er koden nem at forstå og ændre?
+
+
+Best Practices Tjekliste
+✅ Følger koden SOLID principperne?
+✅ Er der klar separation of concerns?
+✅ Er klasserne løst koblede?
+✅ Er koden DRY (ingen duplikering)?
+✅ Er navngivning konsistent og beskrivende?
+✅ Er der passende abstraktion?
+✅ Er koden testbar?
+✅ Er der dokumentation hvor nødvendigt?
+
+
+
+
+
+1. DRY (Don't Repeat Yourself)
+class Elev(Person):
+    def __init__(self, navn, alder, køn, skole, klassetrin):
+        super().__init__(navn, alder, køn)  # Genbruger Person's kode
+
+2. Separation of Concerns
+Hver funktion har ét ansvar:
+
+gem_personer_csv() - kun gemme
+indlaes_personer_csv() - kun indlæse
+main() - kun håndtere menu/brugerinteraktion
+
+
+
+SOLID Principperne
+SOLID er fem designprincipper der hjælper med at skabe vedligeholdelsesvenlig og skalerbar kode:
+1. Single Responsibility Principle (SRP)
+En klasse bør kun have ét ansvar og én grund til at ændre sig.
+
+```{python}
+# DÅRLIGT: Klassen har flere ansvarsområder
+class Bruger:
+    def __init__(self, navn, email):
+        self.navn = navn
+        self.email = email
+    
+    def gem_til_database(self):
+        # Database logik her
+        pass
+    
+    def send_email(self):
+        # Email logik her
+        pass
+
+# GODT: Opdelt i separate klasser med enkelt ansvar
+class Bruger:
+    def __init__(self, navn, email):
+        self.navn = navn
+        self.email = email
+
+class BrugerDatabase:
+    def gem(self, bruger):
+        # Kun database ansvar
+        pass
+
+class EmailService:
+    def send(self, bruger, besked):
+        # Kun email ansvar
+        pass
+```
+
+2. Open/Closed Principle (OCP)
+Klasser bør være åbne for udvidelse men lukkede for modifikation.
+
+```{python}
+from abc import ABC, abstractmethod
+
+# Abstrakt basis klasse
+class Beregner(ABC):
+    @abstractmethod
+    def beregn(self, beløb):
+        pass
+
+# Udvidelser uden at ændre basis klassen
+class MomsBeregner(Beregner):
+    def beregn(self, beløb):
+        return beløb * 0.25
+
+class RabatBeregner(Beregner):
+    def __init__(self, rabat_procent):
+        self.rabat = rabat_procent
+    
+    def beregn(self, beløb):
+        return beløb * (self.rabat / 100)
+```
+
+3. Liskov Substitution Principle (LSP)
+Subklasser skal kunne erstatte deres basis klasser uden at bryde programmets korrekthed.
+4. Interface Segregation Principle (ISP)
+Klienter bør ikke tvinges til at afhænge af interfaces de ikke bruger.
+5. Dependency Inversion Principle (DIP)
+Højniveau moduler bør ikke afhænge af lavniveau moduler. Begge bør afhænge af abstraktioner.
+
+DRY, KISS og YAGNI
+DRY (Don't Repeat Yourself): Undgå kodeduplikering
+
+```{python}
+# DÅRLIGT: Gentagen kode
+def beregn_løn_direktør(timer, timeløn):
+    grundløn = timer * timeløn
+    bonus = grundløn * 0.20
+    return grundløn + bonus
+
+def beregn_løn_manager(timer, timeløn):
+    grundløn = timer * timeløn
+    bonus = grundløn * 0.15
+    return grundløn + bonus
+
+# GODT: Genbrugelig funktion
+def beregn_løn(timer, timeløn, bonus_procent):
+    grundløn = timer * timeløn
+    bonus = grundløn * bonus_procent
+    return grundløn + bonus
+```
+
+KISS (Keep It Simple, Stupid): Hold løsninger simple
+YAGNI (You Aren't Gonna Need It): Implementer kun det du har brug for nu
+
+
+
+
+
+
+# Self 
+
+Hvad er self generelt i Python?
+
+self er ikke et nøgleord, men en konvention i Python.
+
+Det er det første argument i instansmetoder, som refererer til det objekt, metoden bliver kaldt på.
+
+Det gør det muligt at:
+
+Få adgang til objektets attributter (felter)
+
+Kalde andre metoder på samme objekt
+
+Skelne mellem klassens navn og den konkrete instans
+
+Tænk på self som “dette specifikke objekt”:
+
+Hvis klassen er en opskrift på en kage, så er self den enkelte kage, der bages fra opskriften.
+
+Attributter som self.navn er ingredienser gemt i den specifikke kage.
+
+
+Når du kalder p.alder(), oversætter Python internt det til:
+
+```{python}
+Person.alder(p)
+
+```
+
+hvor p bliver self.
+
+Uden self ved funktionen ikke, hvilket objekt den skal arbejde me
+
+self.navn = navn → gemmer den konkrete værdi på objektet.
+
+self.alder = alder → kalder alder.setter via property, som igen bruger self._alder.
+
+self.køn = køn → gemmer køn på objektet.
+
+Uden self ville Python ikke vide, hvor attributterne skulle gemmes – de ville bare være lokale variabler i __init__.
+
+```{python}
+p = Person("Anna", 25, "F")
+Person.__init__(p, "Anna", 25, "F")
+# p bliver "self" inde i __init__
+```
+
+
+
+
+
+
+
+
+```{python}
+      p = Person("Anna", 25, "F")          <-- instans oprettes
+                 │
+                 ▼
+        __init__(self=p, navn="Anna", alder=25, køn="F")
+                 │
+                 ├─ self.navn = "Anna"       # gemmes i p.__dict__["navn"]
+                 │
+                 ├─ self.alder = 25          # property.__set__ → fset(p, 25)
+                 │       │
+                 │       ▼
+                 │   def alder(self, value):
+                 │       self._alder = 25   # gemmes i p.__dict__["_alder"]
+                 │
+                 └─ self.køn = "F"          # gemmes i p.__dict__["køn"]
+
+------------------------------------------------------
+Læse eksempler:
+
+p.alder            <-- property.__get__(p, Person) → fget(p) → return p._alder
+p.navn             <-- læses direkte fra p.__dict__["navn"]
+p.køn              <-- læses direkte fra p.__dict__["køn"]
+
+------------------------------------------------------
+Skrive eksempel:
+
+p.alder = 30        <-- property.__set__(p, 30) → fset(p, 30) → p._alder = 30
+
+```
+Alle attributter og property-opkald er bundet til den konkrete instans p via self.
+
+Property-mekanikken gør, at du kan bruge p.alder som om det var en almindelig variabel, men den kalder faktisk metoder bag kulissen.
+
+| Kodeelement                                                         | Type / Funktion             | Forklaring                                                       |
+| ------------------------------------------------------------------- | --------------------------- | ---------------------------------------------------------------- |
+| `class Person:`                                                     | Klasse                      | Blueprint for person-objekter                                    |
+| `def __init__(self, navn, alder, køn):`                             | Instansmetode / initializer | Initialiserer et nyt objekt og gemmer værdier                    |
+| `self`                                                              | Parameter i instansmetode   | Refererer til den konkrete instans (fx `p`)                      |
+| `self.navn = navn`                                                  | Attribut                    | Gemmer navnet i objektets namespace                              |
+| `self.køn = køn`                                                    | Attribut                    | Gemmer køn i objektets namespace                                 |
+| `self.alder = alder`                                                | Property-write              | Trigger `property.__set__` → fset(self, alder)                   |
+| `def __str__(self):`                                                | Instansmetode               | Returnerer en læsbar strengrepræsentation af objektet            |
+| `return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"` | Return statement            | Læser instansens værdier; `self.alder` trigger fget via property |
+| `@property`                                                         | Decorator                   | Gør metoden til en “read-only” attribut (getter)                 |
+| `def alder(self):`                                                  | Getter-funktion             | Returnerer instansens private `_alder`                           |
+| `return self._alder`                                                | Return statement            | Henter `_alder` fra objektet                                     |
+| `@alder.setter`                                                     | Decorator                   | Gør det muligt at skrive til `alder` via property                |
+| `def alder(self, value):`                                           | Setter-funktion             | Validerer og gemmer værdien i `_alder`                           |
+| `value = int(value)`                                                | Type-konvertering           | Sørger for, at alder er et heltal                                |
+| `if value < 0: raise ValueError(...)`                               | Validering                  | Alderen må ikke være negativ                                     |
+| `self._alder = value`                                               | Attribut                    | Gemmer den validerede alder i objektets “private” felt `_alder`  |
+| `p = Person("Anna", 25, "F")`                                       | Instansiering               | Skaber et konkret objekt `p` med `navn`, `alder`, `køn`          |
+| `p.alder`                                                           | Property-read               | Kalder `property.__get__` → fget → return `_alder`               |
+| `p.alder = 30`                                                      | Property-write              | Kalder `property.__set__` → fset → gem i `_alder`                |
+
+
+## Decorators 
+
+Python har indbyggede decorators som @property, @classmethod, @staticmethod.
+
+En decorator er en slags "pakke" eller "tilføjelse", som du kan lægge ovenpå en funktion eller en klasse, uden at ændre selve koden inde i funktionen/klassen.
+
+@property
+Lader dig bruge en metode som om den var en attribut.
+
+```{python}
+class Cirkel:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @property
+    def areal(self):
+        return 3.14 * self._radius**2
+
+c = Cirkel(5)
+print(c.areal)  # ser ud som en variabel, men beregnes via en metode
+
+```
+
+
+En indbygget decorator, vi ofte bruger i klasser, er @property.
+Den gør en metode til en slags “beregnet attribut”:
+
+```{python}
+class Person:
+    def __init__(self, navn, fødselsår):
+        self.navn = navn
+        self.fødselsår = fødselsår
+
+    @property
+    def alder(self):
+        from datetime import datetime
+        år_nu = datetime.now().year
+        return år_nu - self.fødselsår
+
+```
+
+```{python}
+p = Person("Anna", 2000)
+print(p.alder)   # ligner en attribut, men beregnes dynamisk
+
+```
+
+@property er en decorator.
+
+Den tager en metode (def alder(self)) og omdanner den til et “property object”.
+
+Property er en descriptor – det betyder, at den har de specielle metoder:
+
+__get__(self, obj, objtype) → bruges, når attributten læses
+
+__set__(self, obj, value) → bruges, når attributten skrives (hvis der er en setter)
+
+__delete__(self, obj) → bruges ved sletning (hvis implementeret)
+
+Når du skriver:
+
+@property
+def alder(self):
+    return self._alder
+
+
+så sker der bag kulissen omtrent dette:
+
+alder = property(fget=alder)  # property objekt med fget peger på din metode
+
+
+property(fget=alder) opretter et property-objekt.
+
+Dette property-objekt har en get metode, som Python automatisk kalder, når du skriver p.alder.
+
+Hvad sker når du skriver p.alder?
+
+Python slår op:
+
+Person.alder → det er nu et property-objekt, ikke længere bare en metode.
+
+Python tjekker, om objektet er en descriptor.
+
+Property-klassen har __get__, derfor kaldes:
+
+Person.alder.__get__(p, Person)
+
+
+property.__get__ gør internt noget som:
+
+def __get__(self, obj, objtype=None):
+    if obj is None:
+        return self
+    if self.fget is None:
+        raise AttributeError("unreadable attribute")
+    return self.fget(obj)
+
+
+obj = den konkrete instans (fx p)
+
+self.fget = din oprindelige metode alder(self)
+
+Til sidst kaldes din metode med self=p:
+
+return self._alder  # returnerer værdien fra instansen
+
+| Kode              | Hvad der sker bag kulissen                                |
+| ----------------- | --------------------------------------------------------- |
+| `@property`       | Omdanner din metode til et **property object**            |
+| `def alder(self)` | Bliver til **fget** i property object                     |
+| `p.alder`         | Kalder `Person.alder.__get__(p, Person)`                  |
+| `__get__`         | Kalder din metode `fget(self=p)` og returnerer resultatet |
+| Return            | Værdien af `self._alder` gives tilbage til brugeren       |
+
+@property skaber et property-objekt med en indbygget __get__, og det er derfor Python automatisk kan håndtere p.alder som en “attribut”, selvom det under motorhjelmen kalder en metode.
+
+@classmethod
+
+```{python}
+class Eksempel:
+    antal = 0
+
+    @classmethod
+    def forøg(cls):
+        cls.antal += 1
+
+```
+
+
+
+
+
+
+
+
+
+
+```{java}
+class PersonJavaStyle:
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+    
+    def get_name(self):
+        return self._name
+    
+    def set_name(self, name):
+        self._name = name
+    
+    def get_age(self):
+        return self._age
+    
+    def set_age(self, age):
+        self._age = age
+
+# Brug:
+person = PersonJavaStyle("Alice", 30)
+print(person.get_name())  # "Alice"
+person.set_age(31)
+print(person.get_age())    # 31
+```
+
+```{python}
+class PersonPythonic:
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        self._name = name
+    
+    @property
+    def age(self):
+        return self._age
+    
+    @age.setter
+    def age(self, age):
+        self._age = age
+
+# Brug - meget mere naturligt!
+person = PersonPythonic("Alice", 30)
+print(person.name)  # "Alice" - ser ud som en attribut!
+person.age = 31     # Naturlig assignment
+print(person.age)   # 31
+```
+
+
+
+Den Pythoniske Filosofi
+Python's tilgang er: "Start simpelt, refaktorer når nødvendigt
+
+```{python}
+# Start med:
+class User:
+    def __init__(self, name):
+        self.name = name  # Simpel attribut
+
+# Senere, hvis du får brug for validering:
+class User:
+    def __init__(self, name):
+        self.name = name
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, value):
+        if not value.strip():
+            raise ValueError("Navn kan ikke være tomt!")
+        self._name = value.strip().title()
+
+# Gammel kode virker stadig!
+```
+
+
+
+
+
+
+FRA EKSEMPEL-KODEN
+
+1) Højniveau-forklaring
+
+I din klasse bruger du @property til at gøre alder til en kontrolleret attribut. Udadtil bruger kode person.alder som en almindelig attribut, men internt bliver der kørt funktion(er) (en getter og en setter):
+
+@property laver en getter (læser funktion): når du læser p.alder, kaldes denne funktion og returnerer værdien.
+
+@alder.setter binder en setter (skriver funktion): når du skriver p.alder = x, kaldes denne funktion og kan validere/transformere x før den gemmes.
+
+Den konkrete implementering bruger en bagvedliggende variabel self._alder til at gemme den faktiske værdi. Det er vigtigt — ellers ville du ende i uendelig rekursion.
+
+@property gør en metode til en kontrolleret "attribut" (så p.alder kalder en funktion), og @alder.setter gør det muligt at validere og sætte værdien — men du skal gemme den faktiske værdi et andet sted (fx self._alder) for at undgå uendelig recursion.
+
+2) Hvad sker der, linje for linje (udvalgte dele)
+
+```{python}
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.alder = alder   # <-- HER kaldes property.setter
+        self.køn = køn
+
+```
+
+Når en Person instantieres, køres __init__.
+
+self.alder = alder kalder den metode, som du har defineret med @alder.setter — ikke en direkte tildeling i __dict__. Setter’en validerer og skriver til self._alder.
+
+```{python}
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
+
+```
+
+print(p) kalder __str__, som inde i f-string’en læser self.alder — det kalder getter’en (den funktion du lavede med @property) og får det aktuelle tal tilbage.
+
+```{python}
+    @property
+    def alder(self) -> int:
+        return self._alder
+
+    @alder.setter
+    def alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
+
+```
+
+@property omslutter din første alder-funktion og returnerer et property-objekt (en descriptor).
+
+```{python}
+@property
+def alder(self): ...
+@alder.setter
+def alder(self, value): ...
+```
+
+```{python}
+def _get_alder(self): ...
+alder = property(_get_alder)
+
+def _set_alder(self, value): ...
+alder = alder.setter(_set_alder)
+# alder er nu et property med både fget og fset
+
+```
+
+@alder.setter tager det property-objekt (nu under navnet alder i klassens namespace) og binder din anden funktion som fset (setter) på samme property.
+
+Det viser hvordan dekoratoren bundter fget og fset i samme property-objekt.
+
+kort opsummering (til en begynder)
+
+@property gør en metode til en attribut: p.alder kører kode i stedet for direkte at hente en værdi.
+
+@alder.setter bestemmer hvordan p.alder = x skal opføre sig (validering + gemme).
+
+Altid gem den rigtige værdi i en separat backing-variabel (typisk _alder) — ellers får du uendelig recursion, fordi en tildeling til alder i setter vil kalde setter igen.
+
+Tænk på property som en receptionist, der styrer adgangen til et privat arkivskuffe (_alder).
+
+Hvor kommer fget og fset fra?
+
+Når du skriver:
+
+@property
+def alder(self) -> int:
+    return self._alder
+
+
+så sker der under motorhjelmen dette:
+
+Din funktion alder(self) bliver givet til klassen property.
+Det svarer til:
+
+alder = property(alder)
+
+
+Klassen property er en indbygget descriptor-klasse i Python. Den gemmer din funktion i en intern attribut kaldet fget.
+Så det er ikke dig, der definerer fget – det er property-objektet, der har en plads til det.
+
+Når du senere skriver:
+
+@alder.setter
+def alder(self, value):
+    ...
+
+
+så sker der dette:
+
+Python ser, at alder i klassens namespace allerede er et property-objekt.
+
+Når du kalder @alder.setter, laver Python i virkeligheden:
+
+alder = alder.setter(setter_function)
+
+
+Metoden property.setter returnerer et nyt property-objekt, hvor fset er sat til din setter-funktion.
+Nu har property altså både en fget (din første metode) og en fset (din setter)
+
+```{python}
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.alder = alder   # <- denne linje er vigtig
+        self.køn = køn
+
+    @property
+    def alder(self):              # ← fget bliver sat her
+        return self._alder
+
+    @alder.setter
+    def alder(self, value):       # ← fset bliver sat her
+        self._alder = int(value)
+
+```
+
+
+```{python}
+self.alder = alder
+   │
+   ▼
+1. Python prøver at tildele attributten "alder"
+   ─> ser i klassen (Person) at der findes en property kaldet 'alder'
+   ─> property er en *data descriptor* (den har fset ≠ None)
+   │
+   ▼
+2. Derfor bruges descriptor-protokollen:
+   Person.alder.__set__(self, alder)
+   │
+   ▼
+3. Det er altså property.__set__ der kører,
+   og property.__set__ gør:
+       return self.fset(obj, value)
+   │
+   ▼
+4. Din egen setter-funktion kaldes:
+       def alder(self, value):
+           self._alder = int(value)
+
+```
+
+
+```{python}
+Kode:   p.alder = 25
+────────────────────────────
+Step 1: Python opdager "alder" er et property (fra klassen Person)
+        ─> Person.alder er et property-objekt
+Step 2: Da property har fset, bruges descriptor-protokollen
+        ─> Kald: property.__set__(Person.alder, obj=p, value=25)
+Step 3: property.__set__ indeholder logik svarende til:
+            def __set__(self, obj, value):
+                if self.fset is None:
+                    raise AttributeError("can't set attribute")
+                return self.fset(obj, value)
+Step 4: property.__set__ kalder din setter:
+        ─> fset(p, 25)
+Step 5: Din kode i setter:
+            def alder(self, value):
+                self._alder = int(value)
+
+```
+
+De er ikke dine metoder – de er metoder, som property-klassen selv har defineret.
+
+property.__get__ → kaldes når du gør p.alder.
+Denne metode kalder så din fget(self) bagved kulissen.
+
+property.__set__ → kaldes når du gør p.alder = 25.
+Denne metode kalder så din fset(self, value) bagved kulissen.
+
+Du ser dem altså ikke i din egen kode, men Python selv kalder dem automatisk, fordi property er en descriptor
+
+```{python}
+p.alder
+   │
+   ▼
+Person.alder.__get__(p, Person)    ← (property.__get__)
+   │
+   ▼
+fget(self)                         ← (din @property metode)
+   │
+   ▼
+return self._alder
+
+```
+
+
+
+```{python}
+p.alder = 25
+   │
+   ▼
+Person.alder.__set__(p, 25)        ← (property.__set__)
+   │
+   ▼
+fset(self, value)                  ← (din @alder.setter metode)
+   │
+   ▼
+self._alder = 25
+
+```
+
+Hvis vi ikke brugte @property og @alder.setter, kunne vi lave det samme “manuelt” sådan her:
+
+```{python}
+class Person:
+    def __init__(self, navn, alder, køn):
+        self.navn = navn
+        self.set_alder(alder)   # vi kalder vores egen setter-metode manuelt
+        self.køn = køn
+
+    def __str__(self):
+        return f"Navn: {self.navn}, Alder: {self.get_alder()}, Køn: {self.køn}"
+
+    def get_alder(self) -> int:
+        return self._alder
+
+    def set_alder(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            raise TypeError("Alder skal være et heltal") from None
+        if value < 0:
+            raise ValueError("Alder kan ikke være negativ")
+        self._alder = value
+
+p = Person("Anna", 25, "F")
+print(p.get_alder())   # vi SKAL kalde metoden selv
+p.set_alder(30)
+print(p.get_alder())
+
+```
+
+Hvad er def alder(self):?
+
+```{python}
+def alder(self):
+    return self._alder
+
+```
+
+def: Dette er Python’s nøgleord til at definere en funktion.
+
+alder: Navnet på funktionen. Det er det navn, du senere kan bruge til at kalde funktionen, eller som property (via @property) kan blive til en kontrolleret attribut.
+
+self: Refererer til det konkrete objekt (instansen) som funktionen kaldes på.
+
+Hvis du skriver p = Person(...) og senere p.alder, så er self p inde i funktionen.
+
+Uden self kan metoden ikke vide, hvilken persons alder der skal læses.
+
+Kort sagt:
+
+alder er en instansmetode, og self repræsenterer det enkelte objekt, funktionen arbejder på.
+
+Hvad sker der i kroppen: return self._alder
+
+self._alder:
+
+_alder er en instans-attribut (et felt/variabel, gemt i objektets __dict__).
+
+Underscore (_) er en konvention, der signalerer “privat” eller “internt brug” – Python forhindrer dig ikke i at tilgå det, men det viser andre programmører, at de ikke bør ændre det direkte.
+
+return:
+
+Koden sender værdien af self._alder tilbage til den, der kaldte funktionen.
+
+Hvis funktionen er brugt som property (@property), vil værdien blive vist som p.alder.
+
+Hvis funktionen kaldes direkte, f.eks. p.alder(), returneres værdien også.
+
+
+Uden decorators
+
+Du skal selv kalde get_alder() og set_alder(...).
+
+API’et bliver tungere og mere Java/C#-agtigt.
+
+Med decorators
+
+Du kan skrive p.alder og p.alder = 30 som om det var en helt almindelig attribut.
+
+Bag kulissen styrer property-objektet, at dine get_alder/set_alder funktioner bliver kaldt.
+
+Det giver både simpelt API for brugeren af klassen og kontrolleret logik for udvikleren.
+
+
+
+
+```{python}
+   p.alder
+      │
+      ▼
+  1. Python ser at 'alder' er et property-objekt
+     fundet på klassen Person
+      │
+      ▼
+  2. Python kalder property.__get__(obj=p, objtype=Person)
+      │
+      ▼
+  3. property.__get__ ser at fget er defineret
+      │
+      ▼
+  4. fget(self) kaldes
+      │
+      ▼
+  5. Din getter-kode kører:
+         return self._alder
+
+```
+
+```{python}
+   p.alder = 25
+      │
+      ▼
+  1. Python ser at 'alder' er et property-objekt
+     (og en data-descriptor, fordi fset findes)
+      │
+      ▼
+  2. Python kalder property.__set__(obj=p, value=25)
+      │
+      ▼
+  3. property.__set__ ser at fset er defineret
+      │
+      ▼
+  4. fset(self, value) kaldes
+      │
+      ▼
+  5. Din setter-kode kører:
+         value = int(value)
+         if value < 0: raise ValueError
+         self._alder = value
+
+```
+
+
+p.alder → triggere property.__get__ → som kalder din getter (fget).
+
+p.alder = 25 → triggere property.__set__ → som kalder din setter (fset).
+
+fget og fset er bare referencer til de funktioner, du har skrevet (@property def alder(...) og @alder.setter def alder(...)).
+
+__get__ og __set__ er implementeret én gang for alle i Python’s indbyggede property-klasse – det er derfor, du aldrig selv skriver dem.
+
+
+Forkert kode (uden underscore)
+Hvad sker der, når vi laver p.alder = 25?
+
+```{python}
+   p.alder = 25
+      │
+      ▼
+1. Python ser at 'alder' er et property-objekt
+   → kalder property.__set__(obj=p, value=25)
+      │
+      ▼
+2. property.__set__ kalder din fset(self, value)
+      │
+      ▼
+3. Din setter kører:
+       self.alder = int(value)
+      │
+      ▼
+4. self.alder = ... er IGEN en tildeling til property 'alder'
+   → Python kalder property.__set__(obj=p, value=int(value)) (igen!)
+      │
+      ▼
+5. property.__set__ kalder din fset(self, value) (igen!)
+      │
+      ▼
+6. Din setter kører igen og forsøger self.alder = int(value)
+   → ... hvilket kalder property.__set__ igen
+      │
+      ▼
+7. Dette gentager sig uendeligt
+      │
+      ▼
+8. Python når maksimal rekursionsdybde
+   → RecursionError: maximum recursion depth exceeded
+
+```
+
+Fordi i setter’en prøver du at sætte self.alder (som er property’en selv).
+→ Property’en kalder setter’en igen.
+→ Setter’en prøver igen at sætte self.alder.
+→ Loop uden ende.
+
+
+
+I setter’en:
+
+value = int(value) forsøger at konvertere alt, der ligner en talstreng, til heltal (fx "25" → 25).
+
+Hvis konvertering fejler, fanges TypeError/ValueError fra int() og du selv rejser TypeError("Alder skal være et heltal"). from None fjerner den oprindelige fejl i tracebaren, så brugeren kun ser dit klare fejlnavn/tekst.
+
+Hvis værdien er negativ, rejses en ValueError.
+
+Til sidst gemmes den validerede integer i self._alder.
+
+3) Hvorfor self._alder (underscore)?
+
+Hvis du i setter’en skrev self.alder = value, så kalder du setter’en igen → uendelig rekursion (maks. recursion error). Derfor en separat bagvedliggende variabel, typisk self._alder. Konvention: enkel underscore betyder “privat / internal”.
+
+4) Descriptor-protokollen (hvad property egentlig gør)
+
+Kort og konkret:
+
+property er en descriptor. Det betyder, at objektet Person.alder i klassens namespace har metoder __get__ og __set__ (implementeret i CPython).
+
+Når du læser p.alder, kaldes property.__get__(property_obj, p, Person), som viderekalder din fget(self) (getter).
+
+Når du skriver p.alder = 30, kaldes property.__set__(property_obj, p, 30), som viderekalder din fset(self, value) (setter).
+
+Fordel: property kan dermed styre læsning, skrivning og sletning (hvis du implementerer deleter).
+
+6) Praktiske eksempler og hvad du kan forvente
+
+```{python}
+p = Person("Anna", "25", "F")  # "25" konverteres til int i setter
+print(p.alder)     # -> 25  (getter)
+print(p._alder)    # -> 25  (bagvedliggende værdi)
+print(p)           # -> "Navn: Anna, Alder: 25, Køn: F"
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+```{python}
+                  p = Person("Anna", 25, "F")  <-- instans oprettes
+                                │
+                                ▼
+                __init__(self=p, navn="Anna", alder=25, køn="F")
+                                │
+        ┌───────────────────────┼────────────────────────────┐
+        │                       │                            │
+        ▼                       ▼                            ▼
+  self.navn = "Anna"      self.alder = 25            self.køn = "F"
+                            │
+                            ▼
+               property.__set__(Person.alder, obj=p, value=25)  <-- setter kaldt
+                            │
+                            ▼
+                 fset(self=p, value=25)  <-- din setter
+                            │
+                            ▼
+                 value = int(value)
+                            │
+                            ▼
+                 self._alder = 25  <-- gemmes i instansens dict
+
+------------------------------------------------------
+# Læse flow (getter):
+
+p.alder  <-- bruger læser property
+   │
+   ▼
+property.__get__(Person.alder, obj=p, objtype=Person)  <-- Python kalder __get__
+   │
+   ▼
+fget(self=p)  <-- din getter
+   │
+   ▼
+return self._alder  <-- returnerer den gemte alder
+   │
+   ▼
+Resultat sendes tilbage til print / kald
+
+```
+
+
+Forklaring trin-for-trin
+
+Setter:
+
+self.alder = 25 i __init__ trigger property.set.
+
+__set__ kalder din setter-funktion (fset) med self=p og value=25.
+
+Setter validerer værdien og gemmer den i _alder i objektet.
+
+Getter:
+
+Når vi læser p.alder, trigger Python property.get.
+
+__get__ kalder din getter-funktion (fget) med self=p.
+
+Getter returnerer _alder, som blev sat via setter.
+
+
+Vigtige observationer
+
+self binder altid til den konkrete instans (p).
+
+_alder er den private backing-variabel, som både getter og setter arbejder med.
+
+Property-mekanikken (__get__ og __set__) skjuler den faktiske metodekald for brugeren:
+
+Du kan skrive p.alder = 30 eller print(p.alder) som om det var en almindelig variabel.
+
+Bag kulissen kaldes de korrekte metoder med self som argument.
+
+
+```{python}
+                  p = Person("Anna", 25, "F")  <-- instans oprettes
+                                │
+                                ▼
+                __init__(self=p, navn="Anna", alder=25, køn="F")
+                                │
+        ┌───────────────────────┼────────────────────────────┐
+        │                       │                            │
+        ▼                       ▼                            ▼
+  self.navn = "Anna"      self.alder = 25            self.køn = "F"
+                            │
+                            ▼
+               property.__set__(Person.alder, obj=p, value=25)
+                            │
+                            ▼
+                 fset(self=p, value=25)  <-- setter-kald
+                            │
+                   ┌────────┴─────────┐
+                   │                  │
+             Prøv konvertere       TypeError?
+             value = int(value)      │
+                   │                  │
+                   ▼                  ▼
+               Success              Raise TypeError: "Alder skal være et heltal"
+                   │
+                   ▼
+            Tjek om value < 0?
+                   │
+          ┌────────┴─────────┐
+          ▼                  ▼
+      False                   True
+      │                       │
+      ▼                       ▼
+Gem i instans:           Raise ValueError: "Alder kan ikke være negativ"
+self._alder = value
+                            │
+                            ▼
+------------------------------------------------------
+# Læse flow (getter):
+
+p.alder  <-- bruger læser property
+   │
+   ▼
+property.__get__(Person.alder, obj=p, objtype=Person)
+   │
+   ▼
+fget(self=p)  <-- getter-kald
+   │
+   ▼
+return self._alder  <-- returnerer den validerede alder
+   │
+   ▼
+Resultat sendes tilbage til print / kald
+
+
+```
+Forklaring af diagrammet
+
+Instansiering (__init__)
+
+self.navn og self.køn gemmes direkte i instansen.
+
+self.alder = 25 → trigger setter via property.
+
+Setter (alder) med fejlhåndtering
+
+int(value) → hvis det fejler, kastes TypeError.
+
+value < 0 → kastes ValueError.
+
+Ellers gemmes i _alder.
+
+Getter (alder)
+
+Returnerer _alder.
+
+Flowet stopper aldrig, da getter ikke har validering.
+
+self’s rolle
+
+Binder alle attributter og metoder til den specifikke instans (p).
+
+Property’s fget/fset modtager altid self=p som argument, så alt er instans-specifikt.
+
+Property-mekanikken
+
+self.alder = ... → kalder property.__set__ → fset → _alder.
+
+p.alder → kalder property.__get__ → fget → _alder.
+
+Forklaring af diagrammet
+
+__init__
+
+Gemmer navn og køn direkte i objektets dictionary.
+
+Når alder sættes, trigger det property.setter.
+
+Setter (alder)
+
+Try/except → konverterer input til int, ellers TypeError.
+
+Kontrol for negativ alder → ValueError hvis input < 0.
+
+Hvis valid → gemmes i _alder.
+
+Getter (alder)
+
+Returnerer _alder fra instansen.
+
+Brugeren oplever det som en normal variabel (p.alder).
+
+self’s rolle
+
+Binder alle metoder og data til den konkrete instans (p).
+
+Getter og setter modtager altid self, så de ved hvilken persons data de arbejder med.
+
+
+
+
+```{python}
+          e = Elev("Anna", 25, "F", "Rådhus Skole", 5)  <-- instans oprettes
+                                │
+                                ▼
+   Elev.__init__(self=e, navn="Anna", alder=25, køn="F", skole="Rådhus Skole", klassetrin=5)
+                                │
+                                ▼
+                super().__init__(navn="Anna", alder=25, køn="F")  <-- Person init
+                                │
+                                ▼
+        __init__(self=e, navn="Anna", alder=25, køn="F")
+                                │
+        ┌───────────────┬───────────────┬───────────────┐
+        │               │               │
+        ▼               ▼               ▼
+self.navn = "Anna"  self.alder = 25  self.køn = "F"
+                     │
+                     ▼
+          property.__set__(Person.alder, obj=e, value=25)
+                     │
+                     ▼
+               fset(self=e, value=25)  <-- setter
+                     │
+           ┌─────────┴─────────┐
+           │                   │
+           ▼                   ▼
+   Prøv int(value)         TypeError?
+           │                   │
+           ▼                   ▼
+       Success          Raise TypeError: "Alder skal være et heltal"
+           │
+           ▼
+    Tjek om value < 0?
+           │
+   ┌───────┴───────┐
+   ▼               ▼
+False             True
+  │                 │
+  ▼                 ▼
+Gem i instans   Raise ValueError: "Alder kan ikke være negativ"
+self._alder = value
+                                │
+                                ▼
+self.skole = "Rådhus Skole"  <-- gemmes direkte i instans
+self.klassetrin = 5           <-- gemmes direkte i instans
+
+------------------------------------------------------
+# Læse flow (getter):
+
+e.alder  <-- property læsning
+   │
+   ▼
+property.__get__(Person.alder, obj=e, objtype=Person)
+   │
+   ▼
+fget(self=e)  <-- getter
+   │
+   ▼
+return self._alder  <-- returnerer 25
+   │
+   ▼
+Resultat sendes tilbage
+
+------------------------------------------------------
+# __str__ flow:
+
+print(e)  <-- kald på __str__
+   │
+   ▼
+Elev.__str__(self=e)
+   │
+   ▼
+super().__str__()  <-- Person.__str__(self=e)
+   │
+   ▼
+return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
+   │
+   ▼
+Resultat fra Person.__str__ kombineres i Elev.__str__:
+   "Navn: Anna, Alder: 25, Køn: F, Skole: Rådhus Skole, Klassetrin: 5"
+
+```
+Forklaring
+
+Instansiering af Elev
+
+Elev.__init__ kalder super().__init__() → kører Person.__init__.
+
+Person.__init__ sætter navn, køn og alder.
+
+self.alder = 25 → trigger property setter med fejlhåndtering.
+
+Setter med fejl
+
+int(value) → TypeError hvis input er ugyldigt.
+
+value < 0 → ValueError hvis input er negativ.
+
+Ellers gemmes _alder i instansen.
+
+Nye attributter i Elev
+
+skole og klassetrin gemmes direkte i instansen.
+
+Getter (alder)
+
+Returnerer _alder fra instansen (e._alder).
+
+__str__ metode
+
+Elev.__str__ kalder super().__str__() → Person-delen af teksten.
+
+Derefter tilføjes skole og klassetrin.
+
+self’s rolle
+
+Binder alle attributter og property-opkald til den konkrete instans (e).
+
+Både Person- og Elev-metoder arbejder på samme objekt.
+
+
+
+```{python}
+# --- Opret objekt eksempel ---
+p1 = Person("Anna", 25, "F")
+p2 = Elev("Mikkel", 12, "M", "Rådhus Skole", 5)
+
+# --- Person/Elev init flow ---
+
+p1 = Person(...)
+   │
+   ▼
+Person.__init__(self=p1, navn="Anna", alder=25, køn="F")
+   │
+   ├─ self.navn = "Anna"
+   │
+   ├─ self.alder = 25
+   │     │
+   │     ▼
+   │ property.__set__(Person.alder, obj=p1, value=25)
+   │     │
+   │     ▼
+   │ fset(self=p1, value=25)
+   │     │
+   │     ├─ Try int(value) → succes
+   │     ├─ value < 0 ? → nej
+   │     └─ self._alder = 25
+   │
+   └─ self.køn = "F"
+
+p2 = Elev(...)
+   │
+   ▼
+Elev.__init__(self=p2, navn="Mikkel", alder=12, køn="M", skole="Rådhus Skole", klassetrin=5)
+   │
+   ▼
+super().__init__(navn, alder, køn) → Person.__init__
+   │
+   ▼  (samme som p1)
+self.navn = "Mikkel"
+self.alder = 12 → property setter validering → self._alder = 12
+self.køn = "M"
+   │
+   ▼
+self.skole = "Rådhus Skole"
+self.klassetrin = 5
+
+------------------------------------------------------
+# --- Læse/udskrive via __str__ ---
+
+print(p1) / print(p2)
+   │
+   ▼
+p1.__str__() → "Navn: Anna, Alder: 25, Køn: F"
+p2.__str__() → Elev.__str__()
+                   │
+                   ▼
+          super().__str__() → Person.__str__()
+                   │
+                   ▼
+          kombinerer skole + klassetrin
+Resultat: "Navn: Mikkel, Alder: 12, Køn: M, Skole: Rådhus Skole, Klassetrin: 5"
+
+------------------------------------------------------
+# --- Gem til CSV ---
+
+gem_personer_csv([p1, p2])
+   │
+   ▼
+script_dir = mappe hvor .py filen ligger
+filepath = script_dir + FILENAME
+   │
+   ▼
+Åbn fil med csv.DictWriter
+   │
+   ▼
+for p in personer:
+   │
+   ├─ læs p.navn
+   ├─ læs p.alder → property.__get__(p)
+   ├─ læs p.køn
+   ├─ læs getattr(p, "skole", "")
+   └─ læs getattr(p, "klassetrin", "")
+   │
+   ▼
+writer.writerow(row)
+   │
+   ▼
+CSV-fil gemmes
+
+------------------------------------------------------
+# --- Indlæs fra CSV ---
+
+personer = indlaes_personer_csv()
+   │
+   ▼
+script_dir + filepath
+   │
+   ▼
+tjek os.path.exists(filepath)
+   │
+   ├─ Hvis fil findes:
+   │      ▼
+   │   for row in csv.DictReader:
+   │       ├─ læs navn, alder, køn
+   │       ├─ skole = row.get("skole", "")
+   │       ├─ klassetrin = row.get("klassetrin", "")
+   │       └─ hvis skole/klassetrin → append Elev(...)
+   │          ellers → append Person(...)
+   │
+   └─ Hvis fil findes ikke → print("Ingen tidligere fil fundet...")
+
+Resultat: liste med Person/Elev instanser
+
+```
+
+Forklaring
+
+Instansiering
+
+Person og Elev init kører __init__ med self som binding.
+
+Property alder håndterer validering og gemmer _alder.
+
+__str__ metode
+
+Person.str returnerer navn, alder, køn
+
+Elev.str kalder super().str og tilføjer skole + klassetrin
+
+CSV gem
+
+Læser alle relevante attributter via self
+
+Brug af property getter for alder
+
+Brug af getattr for optional skole og klassetrin
+
+CSV indlæsning
+
+Bestemmer om hver række er Person eller Elev
+
+Opretter konkrete objekter med korrekt __init__
+
+self’s rolle
+
+Binder alle attributter (navn, _alder, køn, skole, klassetrin) til den konkrete instans
+
+Property-mekanik og super() virker via self
+
+
+----->
+
+# Gruppe arbejde
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

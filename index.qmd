@@ -157,8 +157,8 @@ Operativsystemer (OS) som **Windows**, **Mac** eller **Linux** er computerens "h
 2. Sørger for at alle programmer (Python, browser, Word osv.) kan køre samtidig uden at kollidere
 3. Fordeler computerens ressourcer (hukommelse, processor, harddisk) mellem programmer
 
-Det er med/gennem OS'et vi kan åbne en terminal/kommandoprompt og kører Python-fortolkeren når vi skriver `python3 script.py` og 
-giver Python adgang til at læse/skrive filer på computeren. 
+Det er med/gennem OS'et vi kan åbne en terminal/kommandoprompt og køre Python-fortolkeren når vi skriver `python3 script.py` og 
+OS'en der giver Python adgang til at læse/skrive filer på computeren. 
 
 
 ---
@@ -169,10 +169,10 @@ giver Python adgang til at læse/skrive filer på computeren.
 ```
 1. Process Management (Multitasking)
 
-Chrome     [████░░░░] 30% CPU
-Spotify    [██░░░░░░] 15% CPU
-Word       [█░░░░░░░] 10% CPU
-Python     [████████] 45% CPU
+Chrome     [████░░░░░░░░░░░░░] 30% CPU
+Spotify    [██░░░░░░░░░░░░░░░] 15% CPU
+Word       [█░░░░░░░░░░░░░░░░] 10% CPU
+Python     [████████░░░░░░░░░] 45% CPU
            └────────┬────────┘
                     │
               OS fordeler CPU tid
@@ -223,6 +223,8 @@ C:\
 ```
 :::
 :::
+
+---
 
 ::: {style="display: flex; justify-content: center; align-items: center;"}
 ::: {style="font-size: 1.5em;"}
