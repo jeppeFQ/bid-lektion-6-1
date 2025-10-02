@@ -231,7 +231,7 @@ C:\
 
 ```
 4. Security & Permissions
-
+ 
 Fil: secrets.txt
 
 OS tjekker:
