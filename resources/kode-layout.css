@@ -1,0 +1,95 @@
+/* ------------------------------------------------------------------
+   To-kolonne-layout for quarto-live kodeceller
+   Editor til venstre, output til hoejre.
+
+   Aktiveres ved at pakke en kodecelle ind i:
+
+   ::: {.kode-split}
+   ```{pyodide}
+   ...
+   ```
+   :::
+
+   DOM-strukturen i quarto-live (barn 1-3 af .exercise-cell):
+     div.exercise-cell
+       div.observablehq                        <- 1: editoren
+       div.quarto-ojs-hide.observablehq        <- 2: skjult hjaelpeelement
+       div.observablehq                        <- 3: outputtet
+   ------------------------------------------------------------------ */
+
+/* ---- Grid-containeren ------------------------------------------- */
+
+.kode-split .exercise-cell {
+  display: grid;
+  grid-template-columns: 3fr 3fr;   /* venstre = kode, hoejre = output */
+  gap: 0 1rem;
+  align-content: start;
+}
+
+/* ---- Venstre kolonne: editoren ---------------------------------- */
+
+.kode-split .exercise-cell > .observablehq:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  align-self: start;
+  min-width: 0;                     /* tillader kolonnen at blive smal */
+}
+
+.kode-split .exercise-editor {
+  margin: 0 !important;             /* overskriver .my-3 fra bootstrap */
+}
+
+.kode-split .exercise-editor .cm-editor {
+  font-size: 0.65em;
+}
+
+.kode-split .exercise-editor-header {
+  font-size: 0.7em;
+}
+
+/* ---- Skjult hjaelpeelement: skal ikke optage plads i grid'et ----- */
+/* Virker layoutet forkert, saa fjern denne regel og giv elementet
+   grid-column: 1 i stedet.                                          */
+
+.kode-split .exercise-cell > .quarto-ojs-hide {
+  display: none;
+}
+
+/* ---- Hoejre kolonne: outputtet ---------------------------------- */
+
+.kode-split .exercise-cell > .observablehq:nth-child(3) {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  overflow: auto;
+  max-height: 55vh;
+}
+
+.kode-split .exercise-cell > .observablehq:nth-child(3) pre {
+  font-size: 0.65em;
+  margin: 0;
+  white-space: pre-wrap;            /* fjern hvis pandas-tabeller roder */
+}
+
+/* Plots skaleres ned til kolonnebredden */
+.kode-split .exercise-cell img,
+.kode-split .exercise-cell svg,
+.kode-split .exercise-cell canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---- Smalle skaerme: fald tilbage til en enkelt kolonne ---------- */
+
+@media (max-width: 900px) {
+  .kode-split .exercise-cell {
+    grid-template-columns: 1fr;
+  }
+
+  .kode-split .exercise-cell > .observablehq:nth-child(1),
+  .kode-split .exercise-cell > .observablehq:nth-child(3) {
+    grid-column: 1;
+    grid-row: auto;
+    max-height: none;
+  }
+}

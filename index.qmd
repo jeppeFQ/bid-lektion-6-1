@@ -1,1477 +1,635 @@
 ---
-title: "Softwaredesign"
-subtitle: ""
+title: "Lektion 5"
+subtitle: "Softwaredesign"
 author: "Jeppe Fjeldgaard Qvist"
 date: today
+engine: knitr
 format: 
-  revealjs:
-    #include-after-body: "resources/timer.html"
+  live-revealjs:
+    css:
+      - resources/kode-layout.css
+    include-after-body: "resources/timer.html"
     navigation-mode: linear
     slide-number: c
     show-slide-number: print
-    embed-resources: true
-    self-contained-math: true
     smaller: true
     scrollable: true
     theme: default
-    include-in-header: 
-      - text: |
-          <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-          <style>
-          .reveal {
-            font-family: "Libre Baskerville", serif !important;
-          }
-          .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
-            font-family: "Libre Baskerville", serif !important;
-          }
-          .reveal .slides section {
-            overflow: visible !important;
-          }
-          .reveal ul, .reveal ol {
-            margin: 0.5em 0;
-            padding-left: 1.5em;
-            overflow: visible !important;
-          }
-          .reveal li {
-            margin-bottom: 0.25em;
-            overflow: visible !important;
-          }
-          </style>
+pyodide:
+  packages:
+    - pandas
 ---
+
+<!--- 
+mkdir -p .qmd-pause && mv *.qmd .qmd-pause/ && \
+  quarto add r-wasm/quarto-live; \
+  mv .qmd-pause/* . && rmdir .qmd-pause
+----->
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
 ## Dagens program
 
-1. Opsamling og opsummering af "Software" (Kap. 4-7 i grundbogen)
-2. Øvelse med eksempler på eksamensspg. 
-3. **Softwaredesign**
-4. Gruppearbejde (mini-projekter)
+1. **Opsamling** 
 
-## Opsamling og opsummering af "Software"
+2. **Køreplanen** 
 
-1. OS'er: lagring af data, filhåndtering
-2. Algoritmer
-3. Programmer og programmering
-4. Python og programmeringsparadigmer 
+3. **Design er oversættelse** (fra kundens beskrivelse til klasser og metoder)
 
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
-```{python}
-#| eval: false
-#| echo: true
+4. **Værktøjerne** (CRC-kort, klassediagram, sekvensdiagram)
 
-class Person:
-    def __init__(self, navn: str, alder: int, køn: str):
-        self.navn = navn
-        self.alder = alder   # kalder setter
-        self.køn = køn
+5. **Virksomheden som objekt** (hvad en arbejdsplads *er*, og hvad den *kan*)
 
-    def __str__(self):
-        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
-
-    @property
-    def alder(self) -> int:
-        return self._alder
-
-    @alder.setter
-    def alder(self, value):
-        try:
-            value = int(value)
-        except (TypeError, ValueError):
-            raise TypeError("Alder skal være et heltal") from None
-        if value < 0:
-            raise ValueError("Alder kan ikke være negativ")
-        self._alder = value
-```
-:::
-:::
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.5em;"}
-```
-        ╔═══════════════════════════════════════╗
-        ║       BRUGER (DIG)                    ║
-        ╚═══════════════════════════════════════╝
-                        ↕
-    ┌─────────────────────────────────────────────┐***
-    │  LAG 5: APPLIKATIONER                       │
-    │  Chrome, Word, Spotify, Python scripts      │
-    └─────────────────────────────────────────────┘
-                        ↕
-    ┌─────────────────────────────────────────────┐****
-    │  LAG 4: PROGRAMMERINGSFRAMEWORKS            │
-    │  Python, Java, .NET, Node.js                │
-    └─────────────────────────────────────────────┘
-                        ↕
-    ┌─────────────────────────────────────────────┐
-    │  LAG 3: SYSTEM BIBLIOTEKER & API'er         │
-    │  Windows API, POSIX, DirectX                │
-    └─────────────────────────────────────────────┘
-                        ↕
-    ┌─────────────────────────────────────────────┐*
-    │  LAG 2: OPERATIVSYSTEM (OS)                 │
-    │  Windows, macOS, Linux                      │
-    └─────────────────────────────────────────────┘
-                        ↕
-    ┌─────────────────────────────────────────────┐
-    │  LAG 1: DEVICE DRIVERS                      │
-    │  Grafikkort driver, USB driver, etc.        │
-    └─────────────────────────────────────────────┘
-                        ↕
-    ┌─────────────────────────────────────────────┐
-    │  LAG 0: FIRMWARE & BIOS/UEFI                │
-    │  Boot system, hardware initialisering       │
-    └─────────────────────────────────────────────┘
-                        ↕
-        ╔═══════════════════════════════════════╗**
-        ║       HARDWARE                        ║
-        ║  CPU, RAM, Harddisk, GPU, etc.        ║
-        ╚═══════════════════════════════════════╝
-```
-:::
-:::
-
-## Drivers (lag 1)
-
-Eksempler:
-
-::: {style="font-size: 0.7em;"}
-* Grafikkort driver (NVIDIA, AMD, Intel)
-* Printer driver (HP, Canon, Epson)
-* WiFi driver
-* USB driver
-* Lyd driver
-* Mus/tastatur driver
-* Hvorfor vigtigt?
-:::
-
-Producenten (e.g., Windows, MacOS) laver driver til deres hardware, så vi fx kan bruge vores printer til både vores MacBook såvel som ChromeBook. 
-
-
-## OS 
-
-Operativsystemer (OS) som **Windows**, **Mac** eller **Linux** er computerens "hovedprogram" der styrer alt.
-
-1. Når vi klikker med musen eller skriver på tastaturet, oversætter OS'et disse kommandoer til noget computeren forstår
-2. Sørger for at alle programmer (Python, browser, Word osv.) kan køre samtidig uden at kollidere
-3. Fordeler computerens ressourcer (hukommelse, processor, harddisk) mellem programmer
-
-Det er med/gennem OS'et vi kan åbne en terminal/kommandoprompt og køre Python-fortolkeren når vi skriver `python3 script.py` og 
-OS'en der giver Python adgang til at læse/skrive filer på computeren. 
-
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.5em;"}
-
-```
-1. Process Management (Multitasking)
-
-Chrome     [████░░░░░░░░░░░░░] 30% CPU
-Spotify    [██░░░░░░░░░░░░░░░] 15% CPU
-Word       [█░░░░░░░░░░░░░░░░] 10% CPU
-Python     [████████░░░░░░░░░] 45% CPU
-           └────────┬────────┘
-                    │
-              OS fordeler CPU tid
-```
-:::
-:::
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.5em;"}
-
-```
-2. Memory Management
-
-RAM (16 GB Total):
-┌─────────────────────────────────────────────┐
-│ OS Kernel:        2 GB    ████              │
-│ Chrome:           4 GB    ████████          │
-│ Python:           1 GB    ██                │
-│ Spotify:          500 MB  █                 │
-│ Available:        8.5 GB  █████████████████ │
-└─────────────────────────────────────────────┘
-```
-:::
-:::
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.5em;"}
-
-```
-3. File System
-
-Fysisk disk (rådata):
-[01001010|11010010|10101101|...]
-
-           ↓ OS'ens filsystem oversætter til
-             den logiske struktur vi ser:
-C:\
-├── Windows\
-├── Program Files\
-├── Users\
-    └── Anna\
-        └── Documents\
-            └── rapport.docx
-```
-:::
-:::
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.5em;"}
-
-```
-4. Security & Permissions
- 
-Fil: secrets.txt
-
-OS tjekker:
-✓ Er du den rigtige bruger?
-✓ Har du læserettigheder?
-✓ Har du skriverettigheder?
-
-Hvis nej → "Access Denied" 
-```
-:::
-:::
-
-
-## OS: Filsystemet
-
-Tænk på computeren som et arkivskab. Operativsystemet organiserer filer i en **hierarkisk struktur**
-
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.2em;"}
-```
-Computer (Rod)
-│
-├── Bruger (din profil)
-│   ├── Dokumenter/
-│   │   ├── Kurser/
-│   │   │   ├── Python/
-│   │   │   │   ├── script.py
-│   │   │   │   └── data.csv
-│   │   │   └── Ledelse/
-│   │   └── Privat/
-│   │
-│   ├── Downloads/
-│   ├── Skrivebord/
-│   └── Billeder/
-│
-├── Program Files/  (installerede programmer)
-└── System/         (OS filer - rør dem ikke!)
-```
-:::
-:::
-
-## OS: Navigation
-
-```{bash}
-# Windows:
-C:\Brugere\Anna\Dokumenter\Python\script.py
-```
-
-<br> 
-
-```{bash}
-#Mac/Linux:
-/Users/Anna/Documents/Python/script.py
-```
-
-## OS: Datalagring
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.8em;"}
-```
-┌─────────────────────────────────────────┐
-│  CPU REGISTRE (nanosekunders adgang)    │ ⚡⚡⚡⚡⚡
-│  Meget lille: ~KB                       │
-└─────────────────────────────────────────┘
-           ↕
-┌─────────────────────────────────────────┐
-│  RAM (arbejdshukommelse)                │ ⚡⚡⚡⚡
-│  Middel: 8-32 GB                        │
-│  FLYGTIGT - slettes ved genstart!       │
-└─────────────────────────────────────────┘
-           ↕
-┌─────────────────────────────────────────┐
-│  SSD/HARDDISK (permanent lagring)       │ ⚡⚡⚡
-│  Stort: 256 GB - 2 TB+                  │
-│  PERMANENT - bevares ved genstart       │
-└─────────────────────────────────────────┘
-           ↕
-┌─────────────────────────────────────────┐
-│  CLOUD/EKSTERN DISK (backup/arkiv)      │ ⚡⚡
-│  Meget stort: ubegrænset                │
-└─────────────────────────────────────────┘
-```
-:::
-:::
-
-## OS: Organisering af data
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.2em;"}
-```
-Anbefalet organisering mini-projekter:
-MinProjekt/
-├── data/           # Rå data
-├── scripts/        # Python filer
-├── output/         # Resultater
-└── README.txt      # Beskrivelse
-```
-:::
-:::
-
-* Brug relative stier i koden 
-* Læg ikke store datafiler i Git/GitHub---brug .gitignore
-
-
-## Algoritmer 
-
-En algoritme er en præcis, trin-for-trin beskrivelse af hvordan man løser et problem eller udfører en opgave. Tænk på det som en opskrift i kogebogen eller en (skatte)formular: Hvert trin skal være klart defineret og i den rigtige rækkefølge.
-
-```{bash}
-1. Fyld vand i kedel
-2. Kog vandet
-3. Læg tepose i kop
-4. Hæld kogende vand i koppen
-5. Vent 3-5 minutter
-6. Fjern tepose
-```
-
-## En god (brugbar) algoritme er eksplicit iht:
-
-* **Input**: Hvad får algoritmen at arbejde med?
-* **Output**: Hvad producerer algoritmen?
-* **Entydighed**: Hvert trin skal være præcist og utvetydigt
-* **Endelighed**: Algoritmen skal stoppe efter et endeligt antal trin
-* (**Effektivitet**: Algoritmen skal løse problemet på en effektiv måde)
-
----
-
-#### Søgealgoritmer
-
-```{python}
-#| eval: false
-#| echo: true
-# Find alle personer der ikke er elever
-ikke_elever = [p for p in personer if not isinstance(p, Elev)]
-```
+6. **Workshop**: videre arbejde med mini-projektet
 
 <br>
 
-#### Sorteringsalgoritmer
 
-```{python}
-#| eval: false
-#| echo: true
-# Sortér personer efter alder
-sorterede = sorted(personer, key=lambda p: p.alder)
-```
 
----
+## Litteraturen, og hvor den bruges
 
-#### Valideringsalgoritmer
+| Kapitel | Bruges til |
+|---|---|
+| Downey kp. 14: *Classes and Functions* | Egne typer, rene funktioner mod modifiers, og hvornår man planlægger frem for at prøve sig frem |
+| Downey kp. 15: *Classes and Methods* | Metoder, `__init__`, `__str__`, polymorfi, og interface mod implementation igen |
+| Downey kp. 16: *Classes and Objects* | Objekter, der indeholder andre objekter, og hvad der sker, når man kopierer dem |
 
-```{python}
-#| eval: false
-#| echo: true
-@alder.setter
-def alder(self, value):
-    try:
-        value = int(value)
-    except (TypeError, ValueError):
-        raise TypeError("Alder skal være et heltal") from None
-    if value < 0:
-        raise ValueError("Alder kan ikke være negativ")
-    self._alder = value
-```
+# Opsamling
+
+## Fem ting, der går direkte videre
+
+::: {.incremental}
+
+- *"Skal ikke fortælle kausalitet, brugeren skal selv forholde sig til dataen"*
+
+- *"Compound info — så køn og løn samlet (én gruppe ad gangen)"*
+
+- *"CVR. Adresse. Virksomhedens navn."* — på listen over, hvad barometeret ikke må sige
+
+- *"Stadigvæk vise data fra andre virksomheder"*, selvom brugeren ikke har tastet sine egne tal ind
+
+- *"Se på den historiske udvikling"* — 2012 mod 2022
+
+:::
 
 <br>
 
-::: {style="display: flex; justify-content: left; align-items: left;"}
-::: {style="font-size: 1em;"}
-```
-INPUT: value (ukendt datatype)
 
-TRIN:
-1. FORSØG at konvertere value til heltal
-2. HVIS konvertering fejler:
-   → Kast fejl: "Alder skal være et heltal"
-3. HVIS value er negativ:
-   → Kast fejl: "Alder kan ikke være negativ"
-4. Gem value i _alder
+## "Skal ikke fortælle kausalitet"
 
-OUTPUT: Valideret alder eller fejlmeddelelse
-```
+Det er den vigtigste sætning i hele bunken.
+
+- Barometeret kan se, at andelen er lav. Det kan **ikke** se hvorfor.
+
+- Rapporten kan vise, at geografien hænger sammen med andelen med indvandrerbaggrund. Den kan ikke sige, at den ene ting forårsager den anden.
+
+- Et værktøj, der blander de to ting sammen, bliver brugt som en dom.
+
+## "Én gruppe ad gangen"
+
+- Jo flere ting man krydser, jo færre arbejdspladser er der tilbage i hver celle.
+
+- *Kvinder i industrien* er mange. *Kvinder i industrien, i Nordjylland, i små private virksomheder, over 55 år* er måske tre personer.
+
+- Så kan man genkende dem. Også selvom der aldrig stod et navn nogen steder.
+
+<br>
+
+::: {.aside}
+Det er den samme regel, Danmarks Statistik bruger, når de beslutter, hvad der må offentliggøres.
 :::
+
+## "Vis stadig de andres tal"
+
+
+## Løn (krav fra kunden...)
+
+- **Rapporten skal ikke måde løn.** Den måler, hvem der er ansat — ikke hvad de tjener.
+
+- Et barometer kan kun svare på det, der står i tallene bag det.
+
+- Og hvis man alligevel viser noget, der *ligner* et svar, så tror brugeren på det.
+
+<br>
+
+::: {.aside}
+Det er forskellen på et **ønske** og et **krav**. Det må bare med i *Om*-siden som noget, barometeret ikke kan.
 :::
 
-## Programmer og programmering 
-
-Et **program** er en komplet, eksekverbar kodet løsning der kombinerer:
-
-1. Algoritmer (problemløsning)
-2. Datastrukturer (organisering af data)
-3. Brugergrænseflade (interaktion med brugeren)
-4. Fejlhåndtering (håndtering af uventede situationer)
-5. I/O operationer (læsning/skrivning af data)
-
-$$
-ROGRAM = KODE + DATA + INSTRUKTIONER
-$$
-
-Programmet er fx vores fulde `.py`-fil. 
-
-> Hvis en algoritme er en opskrift eller programmet en (robot) kok. 
-
----
-
-## Programmer vi kender
-
-* Chrome/Firefox - **webbrowser** (`C++`)
-* Word/Excel - **tekstbehandling** (`C++/C#`)
-* Spotify - **musikafspiller** (`C++/Python/JavaScript`)
-* Python i sig selv - **programmeringssprog** (`C)`
-* Vores eget script - **script.py** (`Python`)
-
-## `Programmering` er udgjort af:
-
-1. Kodesproget
-2. Biblioteket og funktion
-3. Adgang til miljøet programmet kører i
-
-## Kompilerede vs. fortolkede 
+## CVR og navn
 
 :::: {.columns}
-
 ::: {.column width="50%"}
-```{cpp}
-#include <iostream>
-
-int main() {
-    int a = 5;
-    int b = 10;
-    int sum = a + b;
-    std::cout << "Sum: " << sum << std::endl;
-    return 0;
-}
-```
-
-<br>
-```{bash}
-g++ program.cpp -o program.exe    # Kompiler
-./program.exe   
-```
-
-::: {style="font-size: 0.6em;"}
-* Windows: program`.exe`
-* Mac: program`.app`
-:::
-
+**En gruppe** satte CVR, adresse og virksomhedens navn på listen over det, barometeret **ikke** må vise.
 :::
 
 ::: {.column width="50%"}
-```{python}
-#| eval: false
-#| echo: true
-a = 5
-b = 10
-sum = a + b
-print(f"Sum: {sum}")
-```
-
-<br>
-```{bash}
-python3 script.py    # Køres direkte uden kompilering!
-```
-
-<br>
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
-```
-┌──────────────┐         ┌──────────────┐
-│ Kildekode    │         │  Fortolker   │
-│              │ ──────> │  (Python)    │
-│ script.py    │         │              │
-└──────────────┘         └──────┬───────┘
-                                │
-                                │ læser og
-                                │ udfører
-                                │ linje for linje
-                                ▼
-                         ┌──────────────┐
-                         │   Computer   │
-                         └──────────────┘
-```
+**En anden gruppe** satte CVR og navn ind som noget, `Arbejdsplads` skulle **vide**.
 :::
-:::
-
-:::
-
 ::::
 
----
+<br>
 
-| Aspekt | C/C++ | Python |
-|--------|-------|--------|
-| **Hastighed** | Meget hurtig | 10-100x langsommere |
-| **Udviklingshastighed** | Langsom | Meget hurtig |
-| **Sværhedsgrad** | Svært | "Let" |
-| **Hukommelsesstyring** | Manuel (vi styrer) | Automatisk (garbage collector) |
-| **Typisk anvendelse** | OS, spil, databaser | Scripts, data science, web |
-| **Kodelinjer** | Mange | Få |
+::: {.incremental}
 
-## Compiler/fortolker
+- Begge dele kan forsvares — hvis man ved, hvad man vælger.
 
-* Programmering er blevet mere "demokratisk" efter introduktionen af høj-niveau sprog. 
+- Skal barometeret **gemme** noget, man kan genkende en arbejdsplads på? Nej. Så kan det lækkes.
 
-* Niveauerne går fra menneskeligt læsbar (høj-niveau) til maskinforståelig (lav-niveau), hvor hver transformation gør koden mere detaljeret men mindre læsbar.
+- Må man **taste** sit navn ind for sin egen skyld? Måske. Men hvad bruger systemet det til?
 
-Eksempel fra grundbogen: 
+:::
 
-$$Z = X + Y$$
+::: {.fragment}
+Kunden siger nej til begge dele. Barometeret har ikke brug for at vide, hvem I er — og det, man ikke gemmer, kan ikke komme ud.
+:::
 
-1. **GET** values from the memory locations called X and Y **ADD** them togheter and **STORE** them in the memory at location Z
-2. "=" is "replace"/"store" ikke "equal to". 
+## Første bud på kode
 
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.7em;"}
-
-```
-════════════════════════════════════════════════════════════════════
-                         HØJ-NIVEAU PYTHON
-════════════════════════════════════════════════════════════════════
-
-                    def greet(name):
-                        message = "Hej " + name
-                        return message
-                    
-                    result = greet("Anna")
-                    print(result)
-
-────────────────────────────────────────────────────────────────────
-                              ↓ ↓ ↓
-                          🔄 COMPILER
-                              ↓ ↓ ↓
-────────────────────────────────────────────────────────────────────
-
-════════════════════════════════════════════════════════════════════
-                        PYTHON BYTECODE
-════════════════════════════════════════════════════════════════════
-
-    LOAD_CONST       "Hej "          # Hent tekst "Hej "
-    LOAD_FAST        name            # Hent variabel 'name'
-    BINARY_ADD                       # Læg sammen: "Hej " + name
-    STORE_FAST       message         # Gem i 'message'
-    LOAD_FAST        message         # Hent 'message'
-    RETURN_VALUE                     # Returner værdien
-
-────────────────────────────────────────────────────────────────────
-                              ↓ ↓ ↓
-                      ⚙️  FORTOLKER (PVM)
-                              ↓ ↓ ↓
-────────────────────────────────────────────────────────────────────
-
-════════════════════════════════════════════════════════════════════
-                    LAV-NIVEAU MASKINKODE
-                    (CPU instruktioner)
-════════════════════════════════════════════════════════════════════
-
-    MOV  RAX, [0x7fff...]          # Flyt "Hej " til register
-    MOV  RBX, [0x7ffe...]          # Flyt "Anna" til register
-    CALL string_concat             # Kald funktion til sammenlægning
-    MOV  [0x7ffd...], RAX          # Gem resultat i hukommelse
-    PUSH RAX                       # Put på stack
-    CALL print_function            # Kald print funktion
-    POP  RAX                       # Fjern fra stack
-    RET                            # Returner
-
-────────────────────────────────────────────────────────────────────
-                              ↓ ↓ ↓
-                         💻 PROCESSOR
-                              ↓ ↓ ↓
-────────────────────────────────────────────────────────────────────
-
-════════════════════════════════════════════════════════════════════
-                        BINÆR MASKINKODE
-                    (0'er og 1'er i hukommelsen)
-════════════════════════════════════════════════════════════════════
-
-    10110000 01001000  01100101  01101010    # "Hej "
-    10001000 00010101  11110000  00000001    # MOV instruktion
-    10110011 01000001  01101110  01101110    # "Anna"
-    11101000 00110010  11110000  11111111    # CALL instruktion
-    01001000 10001001  00000101  11100000    # MOV resultat
-    11110100 00001111  10111000  00000001    # PUSH operation
+```python
+def andel(antal, i alt):          # 1
     ...
 
-════════════════════════════════════════════════════════════════════
-                            OUTPUT
-════════════════════════════════════════════════════════════════════
+antal_ansatte = int(input("Hvor mange ansatte har virksomheden? "))
+antal_ansatte = 50                # 2
 
-                          Hej Anna
-
-════════════════════════════════════════════════════════════════════
+if antal_ansatte < 0 orantal_kvinder > antal_ansatte:    # 3
+print("Indtast gyldige tal.")     # 4
 ```
+
+::: {.incremental}
+
+1. **Mellemrum i et navn.** `i alt` er to ord. Python ser et navn, der stopper.
+2. **Linje to sletter linje et.** Brugerens svar bliver overskrevet af vores testværdi.
+3. **Et manglende mellemrum.** `orantal_kvinder` findes ikke. Fejlbeskeden peger på `or`.
+4. **Manglende indrykning.** `print` står ikke inde i `if`.
+
 :::
+
+## Linje to sletter linje et
+
+::: {.kode-split}
+
+```{pyodide}
+#| autorun: false
+antal_ansatte = 120      # det, brugeren tastede ind
+antal_ansatte = 50       # det, vi satte, mens vi testede
+
+print(antal_ansatte)
+```
+
 :::
 
----
-
-| Niveau | Læsbarhed | Hastighed | Eksempel |
-|--------|-----------|-----------|----------|
-| Python | ⭐⭐⭐⭐⭐ | ⭐⭐☆☆☆ | `x = a + b` |
-| Bytecode | ⭐⭐⭐☆☆ | ⭐⭐⭐☆☆ | `BINARY_ADD` |
-| Assembly | ⭐⭐☆☆☆ | ⭐⭐⭐⭐☆ | `ADD RAX, RBX` |
-| Binær | ⭐☆☆☆☆ | ⭐⭐⭐⭐⭐ | `10110000` |
-
-# *Øvelse:* FIND ALGORITMERNE!
-
-# Python og programmeringsparadigmer
-
-## Objektorienteret Programmering (OOP)
-
-* Klasser og objekter.
-* Attributter og metoder.
-* **Indkapsling**: Hold data og metoder sammen i klasser
-* **Nedarvning**: Klasser der bygger videre på andre klasser
 <br>
-* **Polymorfisme** (springes over i dag): Objekter der kan opføre sig forskelligt i forskellige situationer
-* (**Genbrugelighed**: Skriv kode én gang, brug den mange gange)
-* (**Abstraktion**: Skjul komplekse detaljer bag simple grænseflader)
-* (**Modularitet**: Opdel store programmer i mindre, håndterbare dele)
 
-## Klasser og Objekter
+- Ingen fejlbesked. Programmet kører. Det svarer bare på et andet spørgsmål, end brugeren stillede.
 
-> Tænk på en klasse som en kageopskrift og objekter som de færdige kager.
+- Det er den slags, der kun findes ved at læse sin egen kode ovenfra og ned, eller ved at teste med værdier, man kender svaret på.
 
-```{python}
-#| eval: false
-#| echo: true
-class Person:
-    def __init__(self, navn, alder, køn):
-        self.navn = navn
-        self.alder = alder
-        self.køn = køn
+
+## Den samme kode, rettet
+
+::: {.kode-split}
+
+```{pyodide}
+#| autorun: false
+def andel(antal, i_alt):
+    """Beregn en andel af de ansatte."""
+    return antal / i_alt
+
+
+antal_ansatte = 50
+antal_kvinder = 20
+
+if antal_ansatte < 50:
+    print("Barometeret dækker kun arbejdspladser med mindst 50 ansatte.")
+elif antal_kvinder < 0 or antal_kvinder > antal_ansatte:
+    print("Indtast gyldige tal. Der kan ikke være flere kvinder end ansatte.")
+else:
+    print(f"Kvindeandel: {andel(antal_kvinder, antal_ansatte):.0%}")
 ```
 
-* **Klassen** (opskriften) beskriver, hvordan noget skal laves
-* **Objektet** (kagen) er det konkrete resultat
-
----
-
-1. Organiserer data og funktionalitet sammen
-2. Modellerer virkeligheden
-
-```{python}
-#| eval: false
-#| echo: true
-# Dette er en klasse (opskriften)
-class Kage:
-    def __init__(self, smag, størrelse):
-        self.smag = smag          # Attribut
-        self.størrelse = størrelse # Attribut
-    
-    def bag(self):                # Metode
-        print(f"Bager en {self.størrelse} {self.smag}-kage!")
-
-# Dette er objekter (de færdige kager)
-chokoladekage = Kage("chokolade", "stor")
-citronkage = Kage("citron", "lille")
-
-# Vi kan bruge metoderne
-chokoladekage.bag()  # Output: Bager en stor chokolade-kage!
-```
-
-## Attributter og Metoder
-
-* **Attributter** = Egenskaber (hvad objektet HAR)
-* **Metoder** = Handlinger (hvad objektet kan GØRE)
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
-
-```{python}
-#| eval: false
-#| echo: true
-class Bil:
-    # Konstruktøren (__init__) kører når vi laver et nyt objekt
-    def __init__(self, mærke, farve, benzin_tank=50):
-        # Attributter (bilens egenskaber)
-        self.mærke = mærke
-        self.farve = farve
-        self.benzin = benzin_tank
-        self.kører = False
-        self.kilometer = 0
-    
-    # Metoder (hvad bilen kan gøre)
-    def start_motor(self):
-        if self.benzin > 0:
-            self.kører = True
-            print(f"{self.mærke} er startet! Brummm...")
-        else:
-            print("Ingen benzin! Tank bilen først.")
-    
-    def kør(self, distance):
-        if not self.kører:
-            print("Start motoren først!")
-            return
-        
-        benzin_forbrug = distance * 0.1  # 0.1 liter per km
-        
-        if self.benzin >= benzin_forbrug:
-            self.benzin -= benzin_forbrug
-            self.kilometer += distance
-            print(f"Kørte {distance} km. Benzin tilbage: {self.benzin:.1f} liter")
-        else:
-            print("Ikke nok benzin til denne tur!")
-    
-    def tank_op(self, liter):
-        self.benzin += liter
-        print(f"Tankede {liter} liter. Total benzin: {self.benzin} liter")
-    
-    def vis_status(self):
-        print(f"\n--- {self.mærke} Status ---")
-        print(f"Farve: {self.farve}")
-        print(f"Kilometer kørt: {self.kilometer}")
-        print(f"Benzin: {self.benzin:.1f} liter")
-        print(f"Motor status: {'Kører' if self.kører else 'Slukket'}")
-
-# bil-klasse i praksis
-min_bil = Bil("Toyota", "rød", 30)
-din_bil = Bil("Tesla", "blå", 40)
-
-# Test af forskellige metoder
-min_bil.vis_status()
-min_bil.start_motor()
-min_bil.kør(50)
-min_bil.tank_op(20)
-min_bil.kør(100)
-min_bil.vis_status()
-```
-:::
 :::
 
----
-
-## Nedarvning (Inheritance) og indkapsling
-
-* Nedarvning er et hierarkisk forhold mellem klasser, hvor en "barn-klasse" (subklasse) arver egenskaber og metoder fra en "forældre-klasse" (superklasse).
-* Nedarvning repræsenterer et "er-en" forhold. En hund ER ET dyr, en bil ER ET køretøj.
-
---- 
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
-```{python}
-#| eval: false
-#| echo: true
-class Dyr:  # Superklasse/Basis klasse
-    def __init__(self, navn, vægt):
-        self.navn = navn
-        self.vægt = vægt
-        self.levende = True
-    
-    def spis(self, mad):
-        print(f"{self.navn} spiser {mad}")
-        self.vægt += 0.1
-    
-    def sov(self):
-        print(f"{self.navn} sover...")
-    
-    def lav_lyd(self):
-        # Abstrakt metode: skal overskrives
-        raise NotImplementedError("Subklassen skal implementere lav_lyd()")
-
-class Hund(Dyr):  # Subklasse der arver fra Dyr
-    def __init__(self, navn, vægt, race):
-        super().__init__(navn, vægt)  # Kalder superklassens konstruktør
-        self.race = race
-    
-    def lav_lyd(self):
-        return "Vov vov!"
-    
-    def apporter(self):  # Hund-specifik metode
-        print(f"{self.navn} apporterer!")
-
-class Kat(Dyr):
-    def __init__(self, navn, vægt, pels_farve):
-        super().__init__(navn, vægt)
-        self.pels_farve = pels_farve
-    
-    def lav_lyd(self):
-        return "Miav!"
-    
-    def kradser(self):  # Kat-specifik metode
-        print(f"{self.navn} kradser på møblerne!")
-
-# Brug af nedarvning
-fido = Hund("Fido", 25, "Golden Retriever")
-misser = Kat("Misser", 4, "sort")
-
-# Begge kan bruge Dyr-metoderne
-fido.spis("hundemad")
-misser.sov()
-
-# Men hver har også sine egne specifikke metoder
-fido.apporter()
-misser.kradser()
-```
-:::
+::: {.aside}
+`input()` virker ikke i cellerne her på slidesene, kun på jeres egen maskine. Derfor er tallene skrevet ind.
 :::
 
-# *Øvelse:* BESKRIV OG DOKUMENTER KODE 
+# Køreplanen
 
-# Softwaredesign 
+## Fra i dag bygger vi det samme
 
-## Formål 
+I har hver jeres design. Det var pointen med sidste gang. Men fra i dag skal vi kunne
+tale om det samme, og jeg skal kunne hjælpe jer alle sammen med den samme fejl.
 
-* Organisere din kode så den er nem at forstå og vedligeholde
-* Genbruge kode i stedet for at gentage dig selv
-* Samarbejde bedre med andre programmører
-* Finde og rette fejl hurtigere
-* Udvide dit program uden at ødelægge eksisterende funktionalitet
+::: {.incremental}
 
-## Succes-kriterier
+- Derfor ligger der nu en `KOEREPLAN.md` i originalen. Hent den med **Sync fork**.
 
-* Let at læse
-* Let at vedligeholde
-* Let at udvide
-* Let at fejlsøge
+- Den siger, hvad produktet er, hvilke lag det består af, og hvad klasserne hedder.
 
-## DRY (Don't Repeat Yourself)
+- Alt, der **ikke** står i den, bestemmer I selv.
 
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.0em;"}
-```{python}
-#| eval: false
-#| echo: true
-class Elev(Person):
-    def __init__(self, navn, alder, køn, skole, klassetrin):
-        super().__init__(navn, alder, køn)  # Genbruger Person's kode
-```
+:::
+
 <br>
-```{python}
-#| eval: false
-#| echo: true
-# DÅRLIGT: Gentagen kode
-def beregn_løn_direktør(timer, timeløn):
-    grundløn = timer * timeløn
-    bonus = grundløn * 0.20
-    return grundløn + bonus
 
-def beregn_løn_manager(timer, timeløn):
-    grundløn = timer * timeløn
-    bonus = grundløn * 0.15
-    return grundløn + bonus
+## Produktet: fire sider
 
-# GODT: Genbrugelig funktion
-def beregn_løn(timer, timeløn, bonus_procent):
-    grundløn = timer * timeløn
-    bonus = grundløn * bonus_procent
-    return grundløn + bonus
-```
-:::
-:::
+| Side | Hvad den gør |
+|---|---|
+| **Forside** | Hvad barometeret er, hvem det er til, og hvad det ikke kan |
+| **Barometer** | Brugeren taster sine tal ind og ser, hvor arbejdspladsen ligger |
+| **Opslag** | Fordelingerne for brancher, størrelser og regioner — uden at taste noget ind |
+| **Om** | Data, definitioner, begrænsninger, og hvad barometeret ikke må bruges til |
 
+<br>
 
-## Separation of Concerns
+Alt sammen bygget med Quarto og lagt på GitHub Pages, fra jeres egen fork.
 
-Hver funktion har ét ansvar!
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.0em;"}
-```{python}
-#| eval: false
-#| echo: true
-gem_personer_csv() # Gemmer kun data!
-indlaes_personer_csv() # Indlæser kun data!
-main() - # Håndterer kun bruger fladen!
-```
-:::
-:::
-
-
-## KISS (Keep It Simple, Stupid)
-
-> Hold løsninger simple
-
-## YAGNI (You Aren't Gonna Need It)
-
-> Implementer kun det du har brug for nu
-
-
-
-
-
-
-
-
-<!---
-## SOLID Principperne
-
-SOLID er fem designprincipper der hjælper med at skabe vedligeholdelsesvenlig og skalerbar kode:
-
-1. **Single Responsibility Principle (SRP): En klasse bør kun have ét ansvar og én grund til at ændre sig.**
-2. Open/Closed Principle (OCP): Klasser bør være åbne for udvidelse men lukkede for modifikation.
-3. Liskov Substitution Principle (LSP): Subklasser skal kunne erstatte deres basis klasser uden at bryde programmets korrekthed.
-4. Interface Segregation Principle (ISP): Klienter bør ikke tvinges til at afhænge af interfaces de ikke bruger.
-5. Dependency Inversion Principle (DIP): Højniveau moduler bør ikke afhænge af lavniveau moduler. Begge bør afhænge af abstraktioner.
-
-
---- 
+## Skærmbilledet
 
 :::: {.columns}
+::: {.column width="48%"}
+**Brugeren taster ind**
 
-::: {.column width="50%"}
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
-```{python}
-#| eval: false
-#| echo: true
-# DÅRLIGT: Klassen har flere ansvarsområder
-class Bruger:
-    def __init__(self, navn, email):
-        self.navn = navn
-        self.email = email
-    
-    def gem_til_database(self):
-        # Database logik her
-        pass
-    
-    def send_email(self):
-        # Email logik her
-        pass
-```
-:::
-:::
+- Branche, sektor, region
+- Antal ansatte
+- Heraf kvinder
+- Heraf 55 år eller derover
+- Heraf med indvandrerbaggrund
 :::
 
-::: {.column width="50%"}
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.6em;"}
-```{python}
-#| eval: false
-#| echo: true
-# GODT: Opdelt i separate klasser med enkelt ansvar
-class Bruger:
-    def __init__(self, navn, email):
-        self.navn = navn
-        self.email = email
+::: {.column width="52%"}
+**Brugeren får**
 
-class BrugerDatabase:
-    def gem(self, bruger):
-        # Kun database ansvar
-        pass
-
-class EmailService:
-    def send(self, bruger, besked):
-        # Kun email ansvar
-        pass
-```
+- Tre placeringer, én pr. dimension
+- En figur med tre paneler
+- En kort forklaring i ord
+- Besked, hvis gruppen måtte gøres bredere
+- Besked, hvis der er under 50 ansatte
 :::
-:::
-:::
-
 ::::
 
----->
+<br>
 
+::: {.fragment}
+**Aldrig ét samlet tal.** Det står i køreplanen, fordi det er den eneste beslutning, rapporten træffer for os.
+:::
 
+## Arkitekturen: fire lag
 
-## Best Practices Tjekliste
+```
+Siden        Quarto + appen          det brugeren ser
+   │
+Appen        app.py                  læser felter, viser svar
+   │
+Kernen       barometer/              alle klasserne.
+   │
+Data         referencetal.csv        aggregerede tal fra Danmarks Statistik
+```
 
-* Er der klar separation of concerns?
-* Er koden DRY (ingen duplikering)?
-* Er navngivning konsistent og beskrivende?
-* Er der passende abstraktion?
-* Er koden testbar?
-* Er der dokumentation hvor nødvendigt?
+<br>
 
+## Klasserne
 
-# Gennemgang af koden fra workshop 1
+| Klasse | Ved | Kan |
+|---|---|---|
+| `Arbejdsplads` | ansatte, antal i hver gruppe, branche, sektor, region | `andel(dimension)`, `stoerrelsesgruppe` |
+| `Referencetal` | alle referencetallene | `find(arbejdsplads, dimension)`, `muligheder(kolonne)` |
+| `Referencegruppe` | beskrivelse, antal arbejdssteder, percentiler | `median()` |
+| `Placering` | dimension, andel, referencegruppe | `interval()`, `saetning()` |
+| `Barometer` | referencetallene | `vurder(arbejdsplads)` |
+| `Resultat` | arbejdspladsen og de tre placeringer | `forklaring()`, `figur()` |
 
----
+<br>
 
+::: {.aside}
+Navnene ligger fast. Indholdet er jeres.
+:::
 
-```{python}
-#| eval: false
-#| echo: true
+## Hvordan de hænger sammen
 
-class Person:
-    def __init__(self, navn: str, alder: int, køn: str):
+```{mermaid}
+classDiagram
+    class Arbejdsplads {
+        +ansatte
+        +antal
+        +branche, sektor, region
+        +andel(dimension)
+        +stoerrelsesgruppe()
+    }
+    class Referencetal {
+        +find(arbejdsplads, dimension)
+        +muligheder(kolonne)
+    }
+    class Referencegruppe {
+        +beskrivelse
+        +percentiler
+        +median()
+    }
+    class Placering {
+        +dimension
+        +andel
+        +interval()
+        +saetning()
+    }
+    class Barometer {
+        +vurder(arbejdsplads)
+    }
+    class Resultat {
+        +forklaring()
+        +figur()
+    }
+    Barometer --> Referencetal : bruger
+    Barometer ..> Resultat : laver
+    Referencetal ..> Referencegruppe : laver
+    Placering --> Referencegruppe : har
+    Resultat --> Placering : har tre
+    Resultat --> Arbejdsplads : handler om
+```
+
+# Design er oversættelse
+
+## To sprog
+
+:::: {.columns}
+::: {.column width="50%"}
+**Naturligt sprog**
+
+Rigt, hurtigt, fuld af underforståelser.
+
+*"Sammenlign med nogle, der ligner os."*
+
+Vi forstår det med det samme. Ingen kan bygge det.
+:::
+
+::: {.column width="50%"}
+**Formelt sprog**
+
+Fattigt, langsomt, uden underforståelser.
+
+```python
+referencetal.find(arbejdsplads, "kvinder")
+```
+
+Ingen misforstår det. Heller ikke maskinen.
+:::
+::::
+
+<br>
+
+::: {.fragment}
+Softwaredesign er arbejdet imellem de to spalter.
+:::
+
+## Fra sætning til kode
+
+Den klassiske fremgangsmåde i objektorienteret analyse: tag kundens beskrivelser [sætninger/sprog], og
+udpensel det i sine delelementer.
+
+> En **arbejdsplads** med mindst 50 **ansatte** skal kunne **se**, hvor den ligger på tre **andele** i forhold til **sammenlignelige arbejdspladser**.
+
+::: {.incremental}
+
+- Noget af beskrivelsen bliver kandidater til **klasser**: arbejdsplads, ansat, andel, sammenligningsgruppe
+
+- Andet bliver kandidater til **metoder**: se, ligge, sammenligne, beregne
+
+- Tallene og reglerne bliver til **betingelser**: mindst 50, tre andele
+
+:::
+
+## Hvad oversættelsen taber
+
+::: {.incremental}
+
+- *"Nogle, der ligner os"* blev til branche, størrelse og sektor. Det er et **valg**. En arbejdsplads kunne ligne en anden på mange andre måder.
+
+- *"Hvordan vi ligger"* blev til en percentil. Et andet **valg**. Det kunne have været en afstand til gennemsnittet, eller en udvikling over tid.
+
+- Da vi strøg *navn* og *adresse*, besluttede vi, at barometeret ikke skal kunne genkende nogen.
+
+:::
+
+# Værktøjerne
+
+## Klassediagram
+
+Et klassediagram viser, hvilke klasser der findes, og hvordan de kender hinanden. Ikke hvad der sker hvornår.
+
+```{mermaid}
+classDiagram
+    class Barometer {
+        +vurder(arbejdsplads)
+    }
+    class Referencetal {
+        +find(arbejdsplads, dimension)
+    }
+    class Resultat {
+        +forklaring()
+        +figur()
+    }
+    Barometer --> Referencetal : har et
+    Barometer ..> Resultat : laver et
+```
+
+::: {.incremental}
+
+- **Fuld pil**: "har et": `Barometer` holder fast i sit `Referencetal` hele tiden
+
+- **Stiplet pil**: "bruger" eller "laver": `Barometer` laver et `Resultat`, men "ejer" det ikke bagefter
+
+:::
+
+## Sekvensdiagram
+
+Et sekvensdiagram viser det modsatte: rækkefølgen. Hvem spørger hvem, og i hvilken orden.
+
+```{mermaid}
+sequenceDiagram
+    actor Bruger
+    Bruger->>app.py: taster tal ind
+    app.py->>Arbejdsplads: lav en arbejdsplads
+    app.py->>Barometer: vurder(arbejdsplads)
+    Barometer->>Referencetal: find(arbejdsplads, "kvinder")
+    Referencetal-->>Barometer: en Referencegruppe
+    Barometer-->>app.py: et Resultat
+    app.py->>Bruger: figur og forklaring
+```
+
+## Prototyping eller planlægning?
+
+Downey kapitel 14 stiller de to op mod hinanden:
+
+:::: {.columns}
+::: {.column width="50%"}
+**Prototyping**
+
+Skriv noget, der virker på ét tilfælde. Ret det, til det virker på flere.
+
+Godt, når man ikke forstår problemet endnu.
+
+Risiko: koden ender som lappeløsninger uden form.
+:::
+
+::: {.column width="50%"}
+**Planlagt udvikling**
+
+Forstå problemet først. Find den rigtige opdeling, og byg den.
+
+Godt, når man kender området.
+
+Risiko: man planlægger efter et problem, man har misforstået.
+:::
+::::
+
+<br>
+
+::: {.fragment}
+I har gjort begge dele. Kravinterviewet var planlægning. De tomme funktioner med `return 0.0` var prototyping. Køreplanen er et forsøg på at lægge det, vi har forstået, fast.
+:::
+
+# Virksomheden som objekt
+
+## Hvad en virksomhed *er*, og hvad den *kan*
+
+Objektorienteret programmering er et forsøg på at få koden til at ligne den måde, vi
+i forvejen taler om verden på. Og vi taler allerede om virksomheder som objekter:
+
+:::: {.columns}
+::: {.column width="50%"}
+**Den *er* noget** (attributter)
+
+Den har 120 ansatte. Den ligger i Nordjylland. Den er privat. Den er i handelsbranchen.
+:::
+
+::: {.column width="50%"}
+**Den *kan* noget** (metoder)
+
+Den ansætter. Den afskediger. Den indberetter. Den beregner sine egne nøgletal.
+:::
+::::
+
+<br>
+
+::: {.fragment}
+Når I skriver `skolen.andel("kvinder")`, siger I noget, der kan læses højt som dansk: *skolens andel af kvinder.* 
+:::
+
+## Et defineret objekt
+
+```{pyodide}
+class Arbejdsplads:
+    """En arbejdsplads, som barometeret ser den."""
+
+    def __init__(self, navn, ansatte, antal):
+        self.navn = navn          # attributter: det, objektet VED
+        self.ansatte = ansatte
+        self.antal = antal        # en dictionary: kvinder, seniorer, indvandrere
+
+skolen = Arbejdsplads("Skolen", 120, {"kvinder": 84, "seniorer": 26, "indvandrere": 9})
+
+print(type(skolen))
+print(skolen.navn, "har", skolen.ansatte, "ansatte")
+print(skolen)
+```
+
+::: {.fragment}
+Den sidste linje er grim. Python ved ikke, hvordan en arbejdsplads skal se ud, når man printer den.
+:::
+
+## Metoder og `__str__`
+
+```{pyodide}
+class Arbejdsplads:
+    """En arbejdsplads, som barometeret ser den."""
+
+    def __init__(self, navn, ansatte, antal):
         self.navn = navn
-        self.alder = alder   # kalder setter
-        self.køn = køn
+        self.ansatte = ansatte
+        self.antal = antal
+
+    def andel(self, gruppe):
+        """Andelen i én gruppe, som et tal mellem 0 og 1."""
+        return self.antal[gruppe] / self.ansatte
 
     def __str__(self):
-        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
+        return f"{self.navn}: {self.ansatte} ansatte, {self.andel('kvinder'):.0%} kvinder"
 
-    @property
-    def alder(self) -> int:
-        return self._alder
+skolen = Arbejdsplads("Skolen", 120, {"kvinder": 84, "seniorer": 26, "indvandrere": 9})
 
-    @alder.setter
-    def alder(self, value):
-        try:
-            value = int(value)
-        except (TypeError, ValueError):
-            raise TypeError("Alder skal være et heltal") from None
-        if value < 0:
-            raise ValueError("Alder kan ikke være negativ")
-        self._alder = value
+print(skolen)
+print(skolen.andel("seniorer"))
 ```
 
-## `self`
-
-* `self` er ikke et nøgleord, men en konvention i Python.
-* Det er det første argument i instansmetoder, som refererer til det objekt, metoden bliver kaldt på.
-* Tænk på self som “dette specifikke objekt”
-* Uden self ved funktionen ikke, hvilket objekt den skal arbejde me
-
-
-Når vi kalder `p.alder()`, oversætter Python internt det til:
-
-```{python}
-#| eval: false
-#| echo: true
-Person.alder(p)
-```
-
-* `self.navn` = navn → gemmer den konkrete værdi på objektet.
-* `self.alder` = alder → kalder alder.setter via property, som igen bruger self._alder.
-* `self.køn` = køn → gemmer køn på objektet.
-
---- 
-
-Uden `self` ville Python ikke vide, hvor attributterne skulle gemmes. De ville være lokale variabler i __init__.
-
-```{python}
-#| eval: false
-#| echo: true
-p = Person("Anna", 25, "F")
-Person.__init__(p, "Anna", 25, "F")
-# p bliver "self" inde i __init__
-```
-
-## Decorators (her, eks. på *validering*)
-
-* Python har indbyggede decorators som `@property`, `@classmethod`, `@staticmethod`.
-* En decorator er en slags "pakke" eller "tilføjelse", som du kan lægge ovenpå en funktion eller en klasse, uden at ændre selve koden inde i funktionen/klassen.
-* `@property` lader os bruge en metode som om den var en attribut og bruges ofte i **klasser**.
-
-```{python}
-#| eval: true
-#| echo: true
-class Cirkel:
-    def __init__(self, radius):
-        self._radius = radius
-
-    @property
-    def areal(self):
-        return 3.14 * self._radius**2
-
-c = Cirkel(5)
-print(c.areal)  # ser ud som en variabel, men beregnes via en metode
-```
-
----
-
-```{python}
-#| eval: true
-#| echo: true
-class Person:
-    def __init__(self, navn, fødselsår):
-        self.navn = navn
-        self.fødselsår = fødselsår
-
-    @property
-    def alder(self):
-        from datetime import datetime
-        år_nu = datetime.now().year
-        return år_nu - self.fødselsår
-
-p = Person("Anna", 2000)
-print(p.alder)   # ligner en attribut, men beregnes dynamisk
-```
-
----
-
-:::: {.columns}
-
-::: {.column width="50%"}
-```{python}
-#| eval: false
-#| echo: true
-class Person:
-    def __init__(self, name, age):
-        self._name = name
-        self._age = age
-    
-    def get_name(self):
-        return self._name
-    
-    def set_name(self, name):
-        self._name = name
-    
-    def get_age(self):
-        return self._age
-    
-    def set_age(self, age):
-        self._age = age
-
-# Brug:
-person = Person("Alice", 30)
-print(person.get_name())  # "Alice"
-person.set_age(31)
-print(person.get_age())   # 31
-```
+::: {.aside}
+`__str__` er en **speciel metode**. Den kaldes af `print` og af `str()`, uden at nogen beder om det. Se Downey kapitel 15.
 :::
 
-::: {.column width="50%"}
-```{python}
-#| eval: false
-#| echo: true
-class PersonPythonic:
-    def __init__(self, name, age):
-        self._name = name
-        self._age = age
-    
-    @property
-    def name(self):
-        return self._name
-    
-    @name.setter
-    def name(self, name):
-        self._name = name
-    
-    @property
-    def age(self):
-        return self._age
-    
-    @age.setter
-    def age(self, age):
-        self._age = age
+# Dataene
 
-# Brug - meget mere naturligt!
-person = PersonPythonic("Alice", 30)
-print(person.name)  # "Alice" - ser ud som en attribut!
-person.age = 31     # Naturlig assignment
-print(person.age)   # 31
+## Referencetallene er en lille database
+
+De ligger i `data/` som **syv tabeller**. Det er typisk sådan, rigtige data er organiseret.
+
+| Tabel | Hvad den indeholder |
+|---|---|
+| `brancher`, `regioner`, `sektorer`, `stoerrelser` | opslagstabeller: et id og et navn |
+| `dimensioner` | de tre ting, vi måler |
+| `grupper` | én række pr. sammenligningsgruppe, med et id til hver af de fire opslagstabeller, et år og antal arbejdssteder |
+| `fordelinger` | én række pr. gruppe **og** dimension: `p10` til `p90` |
+
+<br>
+
+## Sådan hænger tabellerne sammen
+
+```{mermaid}
+erDiagram
+    grupper ||--o{ fordelinger : har
+    brancher ||--o{ grupper : "branche_id"
+    regioner ||--o{ grupper : "region_id"
+    sektorer ||--o{ grupper : "sektor_id"
+    stoerrelser ||--o{ grupper : "stoerrelse_id"
+    dimensioner ||--o{ fordelinger : "dimension_id"
 ```
+
+::: {.fragment}
+Pilen betyder "én til mange": én branche optræder i mange grupper. Én gruppe har tre fordelinger (én pr. dimension).
 :::
 
-::::
+## At sætte to tabeller sammen
 
-* Vi bruger `@property` til at gøre alder til en kontrolleret attribut. Udadtil bruger kode person.alder som en almindelig attribut, men internt bliver der kørt funktion(er) (en getter og en setter):
-* `@property` laver en getter (læser funktion): når du læser p.alder, kaldes denne funktion og returnerer værdien.
-* `@alder.setter` binder en setter (skriver funktion): når vi skriver `p.alder = x`, kaldes denne funktion og kan validere/transformere `x` før den gemmes.
-* Den konkrete implementering bruger en bagvedliggende variabel `self._alder` til at gemme den faktiske værdi. Hvis ikke, ville det ende i uendelig rekursion.
+```{pyodide}
+#| autorun: false
+import pandas as pd
 
----
+# I virkeligheden læses de med pd.read_csv("data/brancher.csv") og så videre.
+brancher = pd.DataFrame({"branche_id": [0, 3], "branche": ["Alle", "Handel"]})
 
-```{python}
-#| eval: false
-#| echo: true
-class Person:
-    def __init__(self, navn, alder, køn):
-        self.navn = navn
-        self.alder = alder   # <-- HER kaldes property.setter
-        self.køn = køn
+grupper = pd.DataFrame({"gruppe_id": [11, 12], "branche_id": [3, 3],
+                        "stoerrelse": ["50-99", "100-249"],
+                        "antal_arbejdssteder": [38, 52]})
 
+fordelinger = pd.DataFrame({"gruppe_id": [11, 12],
+                            "dimension": ["kvinder", "kvinder"],
+                            "p50": [0.448, 0.439]})
+
+tal = (fordelinger
+       .merge(grupper, on="gruppe_id")
+       .merge(brancher, on="branche_id"))
+
+print(tal[["branche", "stoerrelse", "dimension", "p50", "antal_arbejdssteder"]])
 ```
 
-* Når en Person instantieres, køres __init__.
-* `self.alder = alder` kalder den metode, som vi har defineret med `@alder.setter`. Setter’en validerer og skriver til `self._alder`.
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 1.2em;"}
-```
-Kode:   p.alder = 25
-────────────────────────────
-
-   p.alder = 25
-      │
-      ▼
-  1. Python ser at 'alder' er et property-objekt
-     (og en data-descriptor, fordi fset findes)
-      │
-      ▼
-  2. Python kalder property.__set__(obj=p, value=25)
-      │
-      ▼
-  3. property.__set__ ser at fset er defineret
-      │
-      ▼
-  4. fset(self, value) kaldes
-      │
-      ▼
-  5. Din setter-kode kører:
-         value = int(value)
-         if value < 0: raise ValueError
-         self._alder = value
-
-```
-:::
+::: {.aside}
+`merge` sætter to tabeller sammen på en fælles kolonne. I en database hedder det et **join**. Det er den samme operation.
 :::
 
-<!----
+## To ting, I skal regne med
 
-```
+- **Nogle grupper mangler.** 28 ud af 128 kombinationer er udeladt, fordi der ville være for få arbejdssteder i dem. Fx *Industri, 50-99 ansatte, privat sektor* op i 2022.
 
-   p.alder = 25
-      │
-      ▼
-1. Python ser at 'alder' er et property-objekt
-   → kalder property.__set__(obj=p, value=25)
-      │
-      ▼
-2. property.__set__ kalder fset(self, value)
-      │
-      ▼
-3. Din setter kører:
-       self.alder = int(value)
-      │
-      ▼
-4. self.alder = ... er IGEN en tildeling til property 'alder'
-   → Python kalder property.__set__(obj=p, value=int(value)) (igen!)
-      │
-      ▼
-5. property.__set__ kalder fset(self, value) (igen!)
-      │
-      ▼
-6. Din setter kører igen og forsøger self.alder = int(value)
-   → ... hvilket kalder property.__set__ igen!
-      │
-      ▼
-7. Dette gentager sig uendeligt
-      │
-      ▼
-8. Python når maksimal rekursionsdybde
-   → RecursionError: maximum recursion depth exceeded
+- **Der er ingen løn og ingen kommuner.** Uanset hvor gerne vi vil. Det er ikke en mangel i filen; det er en grænse for, hvad barometeret kan svare på.
 
-```
-
-Fordi i setter’en prøver vi at sætte self.alder (som er property’en selv).
-→ Property’en kalder setter’en igen.
-→ Setter’en prøver igen at sætte self.alder.
-→ Loop uden ende.
-
-
------>
-
----
-
-:::: {.columns}
-
-::: {.column width="50%"}
-```
-p.alder
-   │
-   ▼
-Person.alder.__get__(p, Person) ← (property.__get__)
-   │
-   ▼
-fget(self)                      ← (@property metode)
-   │
-   ▼
-return self._alder
-```
-:::
-
-::: {.column width="50%"}
-```
-p.alder = 25
-   │
-   ▼
-Person.alder.__set__(p, 25) ← (property.__set__)
-   │
-   ▼
-fset(self, value)           ← (@alder.setter metode)
-   │
-   ▼
-self._alder = 25
-```
-:::
-
-::::
-
----
-
-Hvis vi ikke brugte `@property` og `@alder.setter`, kunne vi lave det samme “manuelt” således:
-
-:::: {.columns}
-
-::: {.column width="50%"}
-```{python}
-#| eval: false
-#| echo: true
-class Person:
-    def __init__(self, navn, alder, køn):
-        self.navn = navn
-        self.set_alder(alder)   # vi kalder vores egen setter-metode manuelt
-        self.køn = køn
-
-    def __str__(self):
-        return f"Navn: {self.navn}, Alder: {self.get_alder()}, Køn: {self.køn}"
-
-    def get_alder(self) -> int:
-        return self._alder
-
-    def set_alder(self, value):
-        try:
-            value = int(value)
-        except (TypeError, ValueError):
-            raise TypeError("Alder skal være et heltal") from None
-        if value < 0:
-            raise ValueError("Alder kan ikke være negativ")
-        self._alder = value
-
-p = Person("Anna", 25, "F")
-print(p.get_alder())   # vi SKAL kalde metoden selv
-p.set_alder(30)
-print(p.get_alder())
-```
-:::
-
-::: {.column width="50%"}
-```{python}
-class Person:
-    def __init__(self, navn: str, alder: int, køn: str):
-        self.navn = navn
-        self.alder = alder   # kalder setter
-        self.køn = køn
-
-    def __str__(self):
-        return f"Navn: {self.navn}, Alder: {self.alder}, Køn: {self.køn}"
-
-    @property
-    def alder(self) -> int:
-        return self._alder
-
-    @alder.setter
-    def alder(self, value):
-        try:
-            value = int(value)
-        except (TypeError, ValueError):
-            raise TypeError("Alder skal være et heltal") from None
-        if value < 0:
-            raise ValueError("Alder kan ikke være negativ")
-        self._alder = value
-```
-:::
-
-::::
-
----
-
-::: {style="display: flex; justify-content: center; align-items: center;"}
-::: {style="font-size: 0.5em;"}
-```
-
-                  p = Person("Anna", 25, "F")  <-- instans oprettes
-                                │
-                                ▼
-                __init__(self=p, navn="Anna", alder=25, køn="F")
-                                │
-        ┌───────────────────────┼────────────────────────────┐
-        │                       │                            │
-        ▼                       ▼                            ▼
-  self.navn = "Anna"      self.alder = 25            self.køn = "F"
-                            │
-                            ▼
-               property.__set__(Person.alder, obj=p, value=25)
-                            │
-                            ▼
-                 fset(self=p, value=25)  <-- setter-kald
-                            │
-                   ┌────────┴─────────┐
-                   │                  │
-             Prøv konvertere       TypeError?
-             value = int(value)      │
-                   │                  │
-                   ▼                  ▼
-               Success              Raise TypeError: "Alder skal være et heltal"
-                   │
-                   ▼
-            Tjek om value < 0?
-                   │
-          ┌────────┴─────────┐
-          ▼                  ▼
-      False                   True
-      │                       │
-      ▼                       ▼
-Gem i instans:           Raise ValueError: "Alder kan ikke være negativ"
-self._alder = value
-
-------------------------------------------------------
-# Læse flow (getter):
-
-p.alder  <-- bruger læser property
-   │
-   ▼
-property.__get__(Person.alder, obj=p, objtype=Person)
-   │
-   ▼
-fget(self=p)  <-- getter-kald
-   │
-   ▼
-return self._alder  <-- returnerer den validerede alder
-   │
-   ▼
-Resultat sendes tilbage til print / kald
-```
-:::
-:::
-
-## MEN VENT: Den Pythoniske Filosofi
-
-> "Start simpelt, refaktorer når nødvendigt
-
-```{python}
-#| eval: false
-#| echo: true
-# Start med:
-class User:
-    def __init__(self, name):
-        self.name = name  # Simpel attribut
-
-# DEREFTER udvid med validering:
-class User:
-    def __init__(self, name):
-        self.name = name
-    
-    @property
-    def name(self):
-        return self._name
-    
-    @name.setter
-    def name(self, value):
-        if not value.strip():
-            raise ValueError("Navn kan ikke være tomt!")
-        self._name = value.strip().title()
-
-# Gammel kode virker stadig!
-```
-
-# *Mini-projekter!*
-
+# Workshop
