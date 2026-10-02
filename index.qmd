@@ -77,8 +77,6 @@ mkdir -p .qmd-pause && mv *.qmd .qmd-pause/ && \
 
 ## "Skal ikke fortælle kausalitet"
 
-Det er den vigtigste sætning i hele bunken.
-
 - Barometeret kan se, at andelen er lav. Det kan **ikke** se hvorfor.
 
 - Rapporten kan vise, at geografien hænger sammen med andelen med indvandrerbaggrund. Den kan ikke sige, at den ene ting forårsager den anden.
@@ -120,17 +118,17 @@ Det er forskellen på et **ønske** og et **krav**. Det må bare med i *Om*-side
 
 :::: {.columns}
 ::: {.column width="50%"}
-**En gruppe** satte CVR, adresse og virksomhedens navn på listen over det, barometeret **ikke** må vise.
+En gruppe satte CVR, adresse og virksomhedens navn på listen over det, barometeret **ikke** må vise.
 :::
 
 ::: {.column width="50%"}
-**En anden gruppe** satte CVR og navn ind som noget, `Arbejdsplads` skulle **vide**.
+En anden gruppe satte CVR og navn ind som noget, `Arbejdsplads` skulle **vide**.
 :::
 ::::
 
 <br>
 
-::: {.incremental}
+::: {.fragment}
 
 - Begge dele kan forsvares — hvis man ved, hvad man vælger.
 
@@ -141,8 +139,29 @@ Det er forskellen på et **ønske** og et **krav**. Det må bare med i *Om*-side
 :::
 
 ::: {.fragment}
-Kunden siger nej til begge dele. Barometeret har ikke brug for at vide, hvem I er — og det, man ikke gemmer, kan ikke komme ud.
+Kunden siger nej til begge dele. Barometeret har ikke brug for at vide, hvem I er.
 :::
+
+## Andre mulige svar
+
+- ingen enkelte arbejdspladser må kunne genkendes 
+
+- det skal kunne bruges uden at installere noget.
+
+- at man også kan slå tal op uden at taste noget ind
+
+- at det er til at forstå for en, der ikke har læst rapporten.
+
+- modtag arbejdspladsens tal → find de sammenlignelige → placér arbejdspladsen → tegn det → forklar det → slå op uden at taste.
+
+---
+
+- "kan man se, hvilke virksomheder der ligger dårligst" 
+
+- "det skal også virke for min vens firma med 12 ansatte"
+
+> "Vi bygger en hjemmeside, som gør det muligt for en HR-medarbejder på en arbejdsplads med mindst 50 ansatte at se, hvor arbejdspladsen ligger på tre andele i forhold til sammenlignelige arbejdspladser. Vi bygger ikke en rangliste, og vi viser ikke enkelte arbejdspladser."
+
 
 ## Første bud på kode
 
@@ -214,6 +233,10 @@ else:
 ::: {.aside}
 `input()` virker ikke i cellerne her på slidesene, kun på jeres egen maskine. Derfor er tallene skrevet ind.
 :::
+
+# Python øvelser
+
+# Paradigmer vi sprang over sidste gang
 
 # Køreplanen
 
@@ -633,3 +656,7 @@ print(tal[["branche", "stoerrelse", "dimension", "p50", "antal_arbejdssteder"]])
 - **Der er ingen løn og ingen kommuner.** Uanset hvor gerne vi vil. Det er ikke en mangel i filen; det er en grænse for, hvad barometeret kan svare på.
 
 # Workshop
+
+## Sync jeres gruppes fork 
+
+[Se github-guide her](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/syncing-a-fork)

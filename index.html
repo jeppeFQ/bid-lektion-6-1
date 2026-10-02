@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.7.31">
 
   <meta name="author" content="Jeppe Fjeldgaard Qvist">
-  <meta name="dcterms.date" content="2026-10-01">
+  <meta name="dcterms.date" content="2026-10-02">
   <title>Lektion 5</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -214,7 +214,7 @@ Jeppe Fjeldgaard Qvist
 </div>
 </div>
 
-  <p class="date">2026-10-01</p>
+  <p class="date">2026-10-02</p>
 </section>
 <section class="slide level2">
 
@@ -283,7 +283,6 @@ mkdir -p .qmd-pause && mv *.qmd .qmd-pause/ && \
 </section>
 <section id="skal-ikke-fortælle-kausalitet" class="slide level2">
 <h2>“Skal ikke fortælle kausalitet”</h2>
-<p>Det er den vigtigste sætning i hele bunken.</p>
 <ul>
 <li><p>Barometeret kan se, at andelen er lav. Det kan <strong>ikke</strong> se hvorfor.</p></li>
 <li><p>Rapporten kan vise, at geografien hænger sammen med andelen med indvandrerbaggrund. Den kan ikke sige, at den ene ting forårsager den anden.</p></li>
@@ -321,19 +320,41 @@ mkdir -p .qmd-pause && mv *.qmd .qmd-pause/ && \
 <h2>CVR og navn</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><strong>En gruppe</strong> satte CVR, adresse og virksomhedens navn på listen over det, barometeret <strong>ikke</strong> må vise.</p>
+<p>En gruppe satte CVR, adresse og virksomhedens navn på listen over det, barometeret <strong>ikke</strong> må vise.</p>
 </div><div class="column" style="width:50%;">
-<p><strong>En anden gruppe</strong> satte CVR og navn ind som noget, <code>Arbejdsplads</code> skulle <strong>vide</strong>.</p>
+<p>En anden gruppe satte CVR og navn ind som noget, <code>Arbejdsplads</code> skulle <strong>vide</strong>.</p>
 </div></div>
 <p><br></p>
-<ul>
-<li class="fragment"><p>Begge dele kan forsvares — hvis man ved, hvad man vælger.</p></li>
-<li class="fragment"><p>Skal barometeret <strong>gemme</strong> noget, man kan genkende en arbejdsplads på? Nej. Så kan det lækkes.</p></li>
-<li class="fragment"><p>Må man <strong>taste</strong> sit navn ind for sin egen skyld? Måske. Men hvad bruger systemet det til?</p></li>
-</ul>
 <div class="fragment">
-<p>Kunden siger nej til begge dele. Barometeret har ikke brug for at vide, hvem I er — og det, man ikke gemmer, kan ikke komme ud.</p>
+<ul>
+<li><p>Begge dele kan forsvares — hvis man ved, hvad man vælger.</p></li>
+<li><p>Skal barometeret <strong>gemme</strong> noget, man kan genkende en arbejdsplads på? Nej. Så kan det lækkes.</p></li>
+<li><p>Må man <strong>taste</strong> sit navn ind for sin egen skyld? Måske. Men hvad bruger systemet det til?</p></li>
+</ul>
 </div>
+<div class="fragment">
+<p>Kunden siger nej til begge dele. Barometeret har ikke brug for at vide, hvem I er.</p>
+</div>
+</section>
+<section id="andre-mulige-svar" class="slide level2">
+<h2>Andre mulige svar</h2>
+<ul>
+<li><p>ingen enkelte arbejdspladser må kunne genkendes</p></li>
+<li><p>det skal kunne bruges uden at installere noget.</p></li>
+<li><p>at man også kan slå tal op uden at taste noget ind</p></li>
+<li><p>at det er til at forstå for en, der ikke har læst rapporten.</p></li>
+<li><p>modtag arbejdspladsens tal → find de sammenlignelige → placér arbejdspladsen → tegn det → forklar det → slå op uden at taste.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<ul>
+<li><p>“kan man se, hvilke virksomheder der ligger dårligst”</p></li>
+<li><p>“det skal også virke for min vens firma med 12 ansatte”</p></li>
+</ul>
+<blockquote>
+<p>“Vi bygger en hjemmeside, som gør det muligt for en HR-medarbejder på en arbejdsplads med mindst 50 ansatte at se, hvor arbejdspladsen ligger på tre andele i forhold til sammenlignelige arbejdspladser. Vi bygger ikke en rangliste, og vi viser ikke enkelte arbejdspladser.”</p>
+</blockquote>
 </section>
 <section id="første-bud-på-kode" class="slide level2 scrollable">
 <h2>Første bud på kode</h2>
@@ -390,6 +411,16 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlfSwiY29kZSI6ImRl
 <aside><div>
 <p><code>input()</code> virker ikke i cellerne her på slidesene, kun på jeres egen maskine. Derfor er tallene skrevet ind.</p>
 </div></aside></section></section>
+<section id="python-øvelser" class="title-slide slide level1 center">
+<h1>Python øvelser</h1>
+
+</section>
+
+<section id="paradigmer-vi-sprang-over-sidste-gang" class="title-slide slide level1 center">
+<h1>Paradigmer vi sprang over sidste gang</h1>
+
+</section>
+
 <section>
 <section id="køreplanen" class="title-slide slide level1 center">
 <h1>Køreplanen</h1>
@@ -846,8 +877,14 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlfSwiY29kZSI6Imlt
 <li><p><strong>Der er ingen løn og ingen kommuner.</strong> Uanset hvor gerne vi vil. Det er ikke en mangel i filen; det er en grænse for, hvad barometeret kan svare på.</p></li>
 </ul>
 </section></section>
+<section>
 <section id="workshop" class="title-slide slide level1 center">
 <h1>Workshop</h1>
+
+</section>
+<section id="sync-jeres-gruppes-fork" class="slide level2">
+<h2>Sync jeres gruppes fork</h2>
+<p><a href="https://docs.github.com/en/pull-requests/how-tos/work-with-forks/syncing-a-fork">Se github-guide her</a></p>
 
 <script type="pyodide-data">
 eyJvcHRpb25zIjp7ImVudiI6eyJQTE9UTFlfUkVOREVSRVIiOiJwbG90bHlfbWltZXR5cGUifSwiaW5kZXhVUkwiOiJodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvcHlvZGlkZS92MC4yOC4xL2Z1bGwvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsicHlvZGlkZV9odHRwIiwibWljcm9waXAiLCJpcHl0aG9uIiwicGFuZGFzIl19fQ==
@@ -866,7 +903,7 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2RO
 <script type="vfs-file">
 W10=
 </script>
-</section>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
